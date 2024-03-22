@@ -1,0 +1,622 @@
+{% extends 'base.html' %}
+{% load static %}
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.css" rel="stylesheet"/> -->
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/main.min.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/app.min.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.0.2/css/searchPanes.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+<link rel="stylesheet" href="{% static 'css/selectize.css'%}" rel="stylesheet" type="text/css">
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/charts.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/baskets.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/datatables.css' %}" type="text/css">
+
+<!-- Top Content in which create Headings,Create Charts,Tables,Duplicate Pages,Filters,Basket -->
+<!-- Also Display Created Filters, Baskets And Edit View Slider -->
+<div class="top_content">
+  <div class="container-fluid">
+    <!-- start page title -->
+    <div class="row page-title-box-con">
+      <div class="col-12">
+        <div class="page-title-box d-flex">
+          <h4 class="mb-sm-0">WMC TITLE </h4>
+          <div class="edit_view ms-auto d-none" id="edit_view">
+            <label class="switch">
+              <input type="checkbox">
+              <div class="slider">
+                <span>Edit</span>
+                <span>View</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create loaders -->
+  <div class="spinner d-none"></div>
+  <div class="delete_chart_spinner d-none"></div>
+  <div id="spinner1" class="spinner1 text-center d-none"></div>
+  <div id="spinner2" class="spinner2 text-center d-none"></div>
+  <div id="charts_spinner" class="charts_spinner text-center d-none"></div>
+  <div id="filter_spinner" class="filter_spinner text-center d-none"></div>
+
+
+  <!-- Create Hidden tags to save dashboard and project id values -->
+  <input value='{{dashID}}' id="dashID" type="hidden">
+  <input value='{{pid}}' id="project_id" type="hidden">
+  <input value='edit' id="list" type="hidden">
+
+
+  <!-- <div class="col-12 d-flex justify-content-end mb-3 show_dashboard_button d-none">
+    <button class="contactButton" onclick="show_default_dashboard()"> Default Dashboard <div class="iconButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z"></path>
+          <path fill="currentColor" d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+        </svg>
+      </div>
+    </button>
+  </div> -->
+
+
+  <div class="filters_con d-flex">
+    <!-- Left Buttons for Table and Charts Create -->
+    <div class="left_btns">
+      <button title="Create Columns" type="button" id="add_table_header" class="d-none" onclick="add_datatable_header()">
+        <i class="fas fa-table"></i>
+      </button>
+      <button title="View Table" type="button" id="add_table" class="btn btn-primary d-none" onclick="show_datatable(true)">
+        <i class="fas fa-table"></i>
+      </button>
+      <div title="Add Chart" class="display-options d-none">
+        <button id="displayOptionsBtn" class="display-options-btn" onclick="showbartypes(this)">
+          <i class="fas fa-chart-bar"></i>
+        </button>
+        <div id="displayOptionsDropdown" class="display-options-dropdown">
+          <ul>
+            <li class="custom-li">
+              <a>
+                <i class="fas fa-chart-bar"></i> Bar </a>
+            </li>
+            <!-- <li class="custom-li"><a ><i class="fas fa-chart-line"></i> Line</a></li> -->
+            <li class="custom-li">
+              <a>
+                <img src="../../static/img/stack-bar-chart.png"> Stacked Bar </a>
+            </li>
+            <!-- <li class="custom-li"><a ><i class="fas fa-chart-bar"></i> Trend Bar</a></li> -->
+            <li class="custom-li">
+              <a>
+                <i class="fas fa-chart-line"></i> Line </a>
+            </li>
+            <!-- <li class="custom-li"><a ><i class="fas fa-chart-pie"></i> Donut</a></li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Right Buttons for Duplicate Page, Filter and Basket -->
+    <div class="right_btns ms-auto d-none">
+      <!-- Duplicate Page -->
+      <div class="icon_round copy_icon green_bg" onclick="create_duplicate_page()" id="duplicate_page">
+        <!-- <span class="mdi mdi-content-duplicate" style="font-size: 15px;"></span> -->
+        <i title="Create Duplicate Page" class="fa fa-copy fa-2x" aria-hidden="true"></i>
+      </div>
+      <div class="icon_round filter_icon light_blue_bg" onclick="add_filters()">
+        <i title="Create Filter" class="fas fa-filter fa-2x" id="add_filters" aria-hidden="true"></i>
+      </div>
+      <!-- <button type="button" class="cbtn bg_color_blue" id="add_filters" onclick="add_filters()" style="float: right;">Add Filters</button> -->
+      <div class="icon_round basket_icon blue_bg" onclick="show_basket_modal()">
+        <i title="Create Basket" class="fa fa-shopping-basket fa-2x" id="basket_modal" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Filters  -->
+  <div class="clear"></div>
+  <div class="margin_10">
+  <div class="filter_bar_con" style="display: flex;justify-content:end;margin-bottom: 10px;">
+    <nav class="navbar navbar-dark bg_light" id="navbar" style="display: none; width: 100%;border-radius: 4px;margin:10px 0 20px;">
+      <div class="d-flex" id="navbar_container">
+        <span class="filtersbtn d-flex flex-wrap gap-2" style="margin-left:1rem;">
+          <button class="cbtn bg_color_red delete-btn" type="button" id="delete_filters_button" style="position: absolute;right: 5px;top: 25px;" onclick="show_delete_all_filters_modal()">
+            <i class="fas fa-trash"></i>
+          </button>
+        </span>
+      </div>
+    </nav>
+
+    <!-- Create Basket Div -->
+    <div class="basket_div">
+      <nav class="navbar-dark bg_light move-right" id="basket_navbar" style="display:none;width: 100%;justify-content: flex-end;">
+        <div class="d-flex" id="navbar_container">
+          <span class="basketbtn d-flex flex-wrap gap-2" id="basketbtn" style="margin-left:1rem;margin-right:1rem;">
+            <div class="dropdown" id="basket_list">
+              <button class="cbtn dropdown-toggle basket_dropdown_menu2" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: deepskyblue;margin-top: 16px;">Basket</button>
+              <div class="dropdown-menu dropdown-menu-end" id="basket_menu" aria-labelledby="dropdownMenu2"></div>
+            </div>
+          </span>
+        </div>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Create Filters Panel -->
+  <div class="row" id="filters_panel">
+    <div class="col-xl-4"></div>
+    <div class="col-xl-4"></div>
+    <div class="col-xl-4" id="show_filter_panel" style="display: none;">
+      <div class="card right_panel">
+        <div class="card-body">
+          <h4 id="edit_filter_heading">Filter Edit Menu</h4>
+          <button type="button" class="close box_close" aria-label="Close" onclick="hidefilteredit()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <small>Filter Column</small>
+          <br>
+          <select name="filter_column" id="filter_column" class="form-control"></select>
+          <br>
+          <hr>
+          <br>
+          <button type="button" id="delete_filter" class="cbtn bg_color_red" style="float: right;cursor: pointer;">Delete Filter</button>
+          <input type="hidden" name="old_filter_column" id="old_filter_column">
+          <input type="hidden" name="old_filter_column_id" id="old_filter_column_id">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create List Grid Buttons -->
+  
+  <div id="cahrt_views" class="d-flex justify-content-end">
+    <span class="read_only_message" style="display: none; font-size: 14px;margin-top: 5px;margin-right: 6px;color: #ff0000;font-weight: bold;">Read Only</span>
+    <button class="list_view active">
+      <i class="fa fa-bars"></i> List </button>
+    <button class="grid_view">
+      <i class="fa fa-th-large"></i> Grid </button>
+  </div>
+</div>
+<!-- Show/Create Datatables -->
+{%include 'core/datatables/datatables_generic.html'%}
+{%block datatables%}
+{%endblock datatables%}
+
+<!-- Charts Section -->
+<div class="row">
+  <!-- Create/View Charts -->
+  <div class="col-xl-12 charts_container">
+  </div>
+  <!-- Show Edit Panel -->
+  <div class="col-xl-4" id="show_edit_panel" style="display: none;">
+    <div class="card right_panel">
+      <div class="card-body">
+        <h4 id="edit_chart_heading" contenteditable></h4>
+        <button type="button" class="close box_close" aria-label="Close" onclick="hideedit()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <br>
+        <form id="edit_chart" action="">
+
+          <small>Legend Position</small>
+          <div class="clear"></div>
+          <select name="legend_position" id="legend_position" onchange="ChangeLegendPosition(this);">
+            <!-- <option value="">Select Position</option> -->
+            <option value="top">Top</option>
+            <!-- <option value="left">Left</option> -->
+            <!-- <option value="right">Right</option> -->
+            <option value="bottom">Bottom</option>
+          </select>
+          <div class="clear"></div>
+          <small>Chart Type  </small>
+          <div id="edit_chart_type"></div>
+          <div class="clear"></div>
+          <small>Dimension</small>
+          <div class="clear"></div>
+          <div class="margin_10">
+            <button type="button" name="editdimension" id="editdimension" class="edit-button">
+              <span class="default-icon"><b>ABC</b></span>
+              <span class="hover-icon"><i class="fas fa-pen"></i></span>
+            </button>
+            <!-- <button type="button" name="editdimension" id="editdimension"><i class="fas fa-pen"></i></button>           -->
+            <select name="dimension" id="dimension" class="form-control"></select>
+          </div>
+          <div class="clear"></div>
+          <small class="dimension_style d-none" style="color:red">Dimension & Breakdown Dimension Columns must be different</small>
+          <div class="clear"></div>
+          <div class="margin_10">
+            <small>Breakdown Dimension</small>
+            <div class="clear"></div>
+            <button id="add_breakdown_dimension" class="dashed" onclick="show_breakdown_dimension(event)"><i class="fas fa-plus-circle" style="color: #00589e;"></i>  Add breakdown dimension</button>
+            <div class="bd" style="display: flex;">
+            <button type="button" name="editbreakdowndimension" id="editbreakdowndimension" class="edit-button" style="display:none;">
+              <span class="default-icon"><b>ABC</b></span>
+              <span class="hover-icon"><i class="fas fa-pen"></i></span>
+            </button>          
+            <select name="breakdown_dimension" id="breakdown_dimension" class="form-control"></select>
+            <a class="delete_breakdown_dimension" id="delete_breakdown_dimension" style="cursor: pointer;display: none;margin-left: 3px;"><i class="fa" aria-hidden="true">&#xf00d;</i></a>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div class="margin_10">
+            <small class="breakdown_dimension_style d-none" style="color:red">Dimension & Breakdown Dimension Columns must be different</small>
+            <div class="clear"></div>
+            <small>Metric</small>
+            <div class="clear"></div>
+            <input type="hidden" id="editmetricoperation" name="editmetricoperation" value="count">
+            <button type="button" name="editmetric" id="editmetric" onclick="show_metric_modal()" class="edit-button">
+              <span class="default-icon"><b>count</b></span>
+              <span class="hover-icon"><i class="fas fa-pen"></i></span>
+            </button>
+            <select name="metric" id="metric" class="form-control"></select>
+          </div>
+          <div class="clear"></div>
+          <div class="margin_10">
+          <small>Dimension Sort</small>
+          <div class="clear"></div>
+          <select name="sort" id="sort" class="form-control">
+            <option value="DSC">Descending</option>
+            <option value="ASC">Ascending</option>
+          </select>
+          <input type="checkbox" title="Toggle Sort" name="dimension_sort_flag" id="dimension_sort_flag" style="margin-left: 5px;">
+          <div class="clear"></div>
+          <div class="margin_10"></div>
+          <div class="secondary_sort_container">
+          <small class="value_sort">Value Sort</small>
+          <div class="clear"></div>
+          <select name="secondary_sort" id="secondary_sort" class="form-control">
+            <option value="ASC">Ascending</option>
+            <option value="DSC">Descending</option>
+          </select>
+          </div>
+          </div>
+          <div class="clear"></div>
+          <div class="margin_10">
+          <button type="button" id="delete_chart" class="cbtn bg_color_red" style="float: right;cursor: pointer;">Delete Chart</button>
+          </div>
+          <!-- <i title="Delete Chart" class="fa fa-trash" aria-hidden="true" style="float: right;cursor: pointer;color: red;"></i> -->
+          <!-- <input type="button" class="cbtn bg_color_blue" value="Edit" onclick="edittargetedchart()"> -->
+        </form>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Metric Modal Create -->
+<div class="modal fade" id="editmetricModal" tabindex="-1" role="dialog" aria-labelledby="editmetricModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	  <div class="modal-content">
+		<!-- <div class="modal-header" style="background-color: lightblue;">
+		</div>
+		<div class="modal-body">
+		</div> -->
+    <div class="modal-header" style="background-color: lightblue;">
+      <h5 class="modal-title" id="modal_heading">[selectedValue]</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <small>Aggregation</small>
+      <br>
+      <label>
+        <input type="radio" id="aggregation" value="sum" name="aggregation"> Sum
+      </label>
+      <br>
+      <label>
+        <input type="radio" id="aggregation" value="avg" name="aggregation"> Avg
+      </label>
+      <br>
+      <label>
+        <input type="radio" id="aggregation" value="Max" name="aggregation"> Max
+      </label>
+      <br>
+      <label>
+        <input type="radio" id="aggregation" value="Min" name="aggregation"> Min
+      </label>
+      <br>
+      <label>
+        <input type="radio" id="aggregation" value="count" name="aggregation"> Count
+      </label>
+    </div>
+    
+	  </div>
+	</div>
+</div>
+
+<!-- Filter Modal Create -->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header" style="background-color: lightblue;">
+      <h5 class="modal-title"></h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" style="float: right;">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+      <h4>No other filters are available</h4>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Failure Modal Create -->
+<div class="modal fade" id="failureModal" tabindex="-1" role="dialog" aria-labelledby="failureLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header" style="background-color: lightblue;">
+      <!-- <h5 class="modal-title">Error</h5> -->
+      <!-- <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" style="float: right;">&times;</span>
+      </button> -->
+		</div>
+		<div class="modal-body">
+      <h4></h4>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation for Creating Default Dashboard -->
+<div class="modal fade" id="show_default_dashboard_modal" tabindex="-1" role="dialog" aria-labelledby="show_default_dashboard_modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+      <div class="modal-header" style="background-color: lightblue;">
+        <h5 class="modal-title">Default Dashboard</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="float: right;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to make a default dashboard?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal" onclick="cancel_default_dashboard()">No</button>
+        <button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="make_default_dashboard()">Yes</button>
+      </div>
+	  </div>
+	</div>
+</div>
+
+<!-- Create Basket -->
+<div class="modal fade" id="show_basket_modal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="show_basket_modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: lightblue;">
+        <h5 class="modal-title">Create Basket</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="float: right;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="">
+          <small>Basket Name</small>
+          <input type="text" id="basket_name" name="basket_name" style="width: 100%;">
+          <small class="error_basket_name d-none" style="color: red;">Please Enter Basket Name</small>
+          <br>
+          <br>
+          <div id="date_filter">
+            <select name="select_date" id="select_date" style="max-width: 210px;width: 210px;">
+              <option value="">Select Option</option>
+            </select>
+            <select name="select_date_values" id="select_date_values" multiple="multiple">
+            </select>
+          </div>
+          <small class="basket_error_message d-none" style="color: #ff0000;"></small><br>
+          <small>Inclusive Filters</small>
+          <div class="basket_filter_container">
+            <div id="inclusive_filters">
+                <i title="Add inclusive filters" class="fa fa-plus fa-1x" id="add_inclusive_filters" style="cursor:pointer; color: #157eab;" aria-hidden="true"></i>
+            </div>
+            <div class="clear"></div>
+            <small>Exclusive Filters</small>
+            <div id="exclusive_filters">
+              <i title="Add exclusive filters" class="fa fa-plus fa-1x" id="add_exclusive_filters" style="cursor:pointer; color: #157eab;" aria-hidden="true"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="cbtn bg_color_blue" id="create_basket" onclick="create_basket()">Create</button>
+      </div>
+	  </div>
+	</div>
+</div>
+
+<!-- Edit Basket -->
+<div class="modal fade" id="show_edit_basket_modal" tabindex="-1" role="dialog" aria-labelledby="show_edit_basket_modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+      <div class="modal-header" style="background-color: lightblue;">
+        <h5 class="modal-title">Edit Basket</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="float: right;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="">
+          <small>Basket Name</small>
+          <input type="text" id="edit_basket_name" name="edit_basket_name" style="width: 100%;">
+          <small class="error_edit_basket_name d-none" style="color: red;">Please Enter Basket Name</small>
+          <br>
+          <br>
+          <div id="edit_date_filter">
+            <select name="edit_select_date" id="edit_select_date" style="max-width: 210px;width: 210px;">
+              <option value="">Select Option</option>
+            </select>
+            <select name="edit_select_date_values" id="edit_select_date_values" multiple="multiple">
+            </select>
+          </div>
+          <small>Inclusive Filters</small>
+          <div id="edit_inclusive_filters">
+              <i title="Add inclusive filters" class="fa fa-plus edit_inclusive fa-1x" id="edit_inclusive" onclick="edit_basket_filters('edit_inclusive')" style="cursor:pointer; color: #157eab;" aria-hidden="true"></i>
+          </div>
+          <br>
+          <small>Exclusive Filters</small>
+          <div id="edit_exclusive_filters">
+            <i title="Add exclusive filters" class="fa fa-plus fa-1x" id="edit_exclusive" onclick="edit_basket_filters('edit_exclusive')" style="cursor:pointer; color: #157eab;" aria-hidden="true"></i>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="cbtn bg_color_blue" id="edit_basket" onclick="edit_basket()">Update</button>
+      </div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation Delete Chart Modal -->
+<div class="modal fade" id="confirmdeletechartModal" tabindex="-1" role="dialog" aria-labelledby="confirmdeletechartModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete a chart?
+      <div class="spinner d-none"></div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">No</button>
+			<button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="delete_chart()">Yes</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation Delete Filter Modal -->
+<div class="modal fade" id="confirmdeletefilterModal" tabindex="-1" role="dialog" aria-labelledby="confirmdeletefilterModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+		  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete a filter?
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">No</button>
+			<button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="delete_filter()">Yes</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation Delete All Filters -->
+<div class="modal fade" id="confirmdeleteallfiltersModal" tabindex="-1" role="dialog" aria-labelledby="confirmdeleteallfiltersModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+		  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete all filters?
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">No</button>
+			<button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="delete_all_filters()">Yes</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation for Deleting Basket -->
+<div class="modal fade" id="confirmdeletebasketModal" tabindex="-1" role="dialog" aria-labelledby="confirmdeletebasketModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+		  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete a basket?
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">No</button>
+			<button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="delete_basket()">Yes</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Confirmation Delete Dashboard Modal -->
+<div class="modal fade" id="confirmdeletedashboardModal" tabindex="-1" role="dialog" aria-labelledby="confirmdeletedashboardModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete a dashboard?
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">No</button>
+			<button type="button" class="cbtn bg_color_blue" id="confirmDelete" onclick="delete_dashboard()">Yes</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+<!-- Datatable Header Modal -->
+<div class="modal fade" id="add_datatable_header_Modal" tabindex="-1" role="dialog" aria-labelledby="add_datatable_header_Modal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="confirmModalLabel">Choose Columns</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+		</div>
+		<div class="modal-body">
+      <small>Select Columns</small>
+		  <select name="datatable_header" id="datatable_header"></select>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="cbtn bg_color_gray" data-bs-dismiss="modal">Cancel</button>
+			<button type="button" class="cbtn bg_color_blue create_datatable" id="create_datatable" onclick="save_datatable_header()">Create</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+
+<script src="{% static 'js/jquery.min.js'%}" type="text/javascript"></script>
+<!-- datatables -->
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="{% static 'js/selectize.js'%}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/datatables.module.js'%}"></script>
+<script src="{% static 'js/basket_operations.js'%}"></script>
+<script src="{% static 'js/baskets.js'%}"></script>
+<script src="{% static 'js/filters.js'%}"></script>
+<script src="{% static 'js/core_operations.js'%}"></script>
+<script src="{% static 'js/charts_services.js'%}"></script>
+<script src="{% static 'js/charts.js'%}"></script>
+<script src="{% static 'js/dashboard.js'%}"></script>
+<script src="{% static 'js/user.js'%}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+{% endblock content %}

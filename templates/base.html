@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}}</title>
+	<meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+	<meta content="Themesdesign" name="author" />
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="{% static 'images/favicon2.ico'%}" type="image/x-icon">
+    <!--Extra Css-->
+    {% block extra_css %}{% endblock extra_css %}
+	<!-- Bootstrap Css -->
+	<link href="{% static 'css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+	<!-- Icons Css -->
+	<link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+	<!-- App Css-->
+	<link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+
+	<link href="{% static 'css/apexcharts.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+	
+
+
+
+</head>
+
+<body  data-sidebar="dark">
+	<!-- Begin page -->
+	<div id="layout-wrapper">
+
+        {% block header %}
+		{% include 'header.html' %}
+        {% endblock header %}
+    
+		{% block sidebar %}
+        {% include 'sidebar.html' %}
+        {% endblock sidebar %}
+	
+		<!-- ============================================================== -->
+		<!-- Start right Content here -->
+		<!-- ============================================================== -->
+		<div class="main-content">
+			<div class="page-content">
+				
+					<!-- end page title -->{% block content %}{% endblock content %}
+			</div>
+			<!-- End Page-content -->
+            </div>
+		<!-- end main content-->
+	</div>
+	<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+	<script src="{% static 'js/simplebar.min.js' %}"></script>
+	<script src="{% static 'js/waves.min.js' %}"></script>
+    <!--Extra Javascript-->
+	<!-- App js -->
+	<script src="{% static 'js/sidebar.module.js' %}"></script>
+	<script src="{% static 'js/user.js'%}"></script>
+	<script src="{% static 'js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+	<script src="{% static 'js/apexcharts.min.js' %}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+	<script src="{% static 'libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"
+	type="text/javascript"></script>
+	<script>
+		$(document).ready(function(){
+			setTimeout(function(){
+				$('a.has-arrow.waves-effect').click(function(){
+					$(this).next().toggle();
+				});
+			},500);
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/user.css' %}" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/selectize.css'%}" rel="stylesheet" type="text/css">
+
+<!-- Create Loader -->
+<div class="user_spinner d-none"></div>
+
+<!-- Add Page Heading -->
+<div class="container-fluid">
+    <div class="row page-title-box-con">
+      <div class="col-12">
+        <div class="page-title-box d-flex">
+          <h4 class="mb-sm-0">Registered Users </h4>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row show_users_list">
+
+        <!-- Show Registered Users -->
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0" id="userlistTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>Projects</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr id="{{user.id}}">
+                                        <td>{{user.id}}</td>
+                                        <td>{{user.first_name}}</td>
+                                        <td>{{user.last_name}}</td>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.projects}}</td>
+                                        <td><button class="edit-button"  style="color: blue;" 
+                                            onclick="show_edit_user_details(this.getAttribute('data-id'), this.getAttribute('data-firstname'), this.getAttribute('data-lastname'), this.getAttribute('data-username'), this.getAttribute('data-password'), this.getAttribute('data-projects'))"
+                                            data-id="{{ user.id }}"
+                                            data-firstname="{{ user.first_name }}"
+                                            data-lastname="{{ user.last_name }}"
+                                            data-username="{{ user.username }}"
+                                            data-password="{{ user.password }}"
+                                            data-projects="{{ user.projects }}"
+                                        >
+                                        EDIT
+                                    </button></td>
+                                        <td><button class="delete-button" style="color:red" onclick="delete_user(this.getAttribute('data-id'))"
+                                            data-id="{{ user.id }}">DELETE</button></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create New User -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="signup-form">
+                        <form id="add_user" method="POST" onsubmit="create_user(event)">
+                            {% csrf_token %}
+                            <h2 class="heading">Create User</h2>
+                            <p>Please fill in this form to create a user!</p>
+                            <hr>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required>
+                                </div>
+                                <p class="error_message_first_name d-none" style="color: red;margin-left: 24px;">Please Enter First Name</p>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name" required>
+                                </div>
+                                <p class="error_message_last_name d-none" style="color: red;margin-left: 24px;">Please Enter Last Name</p>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username/Email" required>
+                                </div>
+                                <p class="error_message_username d-none" style="color: red;margin-left: 24px;">Please Enter Username</p>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                </div>
+                                <p class="error_message_password d-none" style="color: red;margin-left: 24px;">Please Enter Password</p>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="margin-left: 1px;"><i class="fa fa-group" ></i></span>
+                                    <select name="groups" id="groups" style="width: 90% !important;" required>
+                                        <option value="">Select Group</option>
+                                        {% for group in groups%}
+                                            <option value="{{group.name}}">{{group.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <p class="error_message_group d-none" style="color: red;margin-left: 24px;">Please Select Group</p>
+                            </div>
+                            <div class="form-group operations">
+                                <button type="submit" class="btn btn-primary btn-lg">Add User</button>
+                                <button type="button" class="cancel btn btn-primary btn-lg d-none" style="margin-left: 45px;background: red;" onclick="cancel_changes()">Cancel</button>
+
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</div>
+<script src="{% static 'js/charts.js'%}"></script>
+<script src="{% static 'js/selectize.js'%}"></script>
+{% endblock content %}

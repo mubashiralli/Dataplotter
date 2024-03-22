@@ -1,0 +1,159 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>Register | WMC - Admin & Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'img/favicon2.ico'%}" type="image/x-icon">
+
+        <!-- Bootstrap Css -->
+        <link href="{% static '/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.css" rel="stylesheet"/>
+
+    </head>
+        <style>
+            span.select2.select2-container.select2-container--default.select2-container--below.select2-container--focus{
+                width:100%;
+            }
+        </style>
+    <body class="auth-body-bg">
+        <script src="{% static '/js/jquery.min.js' %}"></script>
+        <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static '/js/metisMenu.min.js' %}"></script>
+        <script src="{% static '/js/simplebar.min.js' %}"></script>
+        <script src="{% static '/js/waves.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="{% static 'js/signup.js' %}"></script>
+
+        <script src="{% static 'js/app.js' %}"></script>
+        <div>
+            <div class="container-fluid p-0">
+                <div class="row g-0">
+                    <div class="col-lg-4">
+                        <div class="authentication-page-content p-4 d-flex align-items-center min-vh-100">
+                            <div class="w-100">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-9">
+                                        <div>
+                                            <div class="text-center">
+                                                <div>
+                                                    <a href="{__percentage_url 'dashboard' %}" class="">
+                                                        <img src="{% static 'img/logo-dark.png' %}" alt="" height="20" class="auth-logo logo-dark mx-auto">
+                                                        <img src="{% static 'img/logo-light.png' %}" alt="" height="20" class="auth-logo logo-light mx-auto">
+                                                    </a>
+                                                </div>
+    
+                                                <h4 class="font-size-18 mt-4">Register account</h4>
+                                                <p class="text-muted">Get your free WMC account now.</p>
+                                            </div>
+
+                                            <div class="p-2 mt-5">
+                                                <form  action=""  method="POST" >
+                                                {% csrf_token %}
+                                                {% for message in messages %}
+                                                <div class="alert {{ message.tags }} mb-4" role="alert">
+                                                    <strong>{{ message }}</strong>
+                                                </div>
+                                                {% endfor %}                                                 
+                                                <div class="mb-3" id='err-msg' hidden>
+                                                <strong id="msg_err"></strong>
+                                                </div>
+
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-user-2-line auti-custom-input-icon"></i>
+                                                        
+                                                        <label for="firstname">First Name*</label>
+                                                        <input class='form-control' type="text" name="firstname" id="firstname" placeholder="Enter your first name">
+                                                        
+                                                    </div>
+
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-user-2-line auti-custom-input-icon"></i>
+                                                        <label for="lastname">Last Name*</label>
+                                                        <input class='form-control' type="text" name="lastname" id="lastname" placeholder="Enter your last name">
+                                                        
+                                                       
+                                                    </div>
+
+
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-user-2-line auti-custom-input-icon" ></i>
+                                                        <label for="username">UserName*</label>
+                                                        <input class='form-control' type="text" name="username" id="username" placeholder="Enter your username">
+                                                        
+                                                        
+                                                    </div>
+
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-mail-line auti-custom-input-icon"></i>
+                                                        
+                                                        <label for="email">Email*</label>
+                                                        <input class='form-control' type="text" name="email" id="email" placeholder="Enter your email">
+                                                    </div>
+                            
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                                                        
+                                                        <label for="password">Password*</label>
+                                                        <input class='form-control' type="password" name="password" id="password1" placeholder="Enter your password">
+                                                    </div>
+                            
+                                                    <div class="auth-form-group-custom mb-4" style="height: 40px;">
+                                                        <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                                                        
+
+                                                        <label for="confirmpassword">Confirm Password*</label>
+                                                        <input class='form-control' type="password" name="password2" id="password2" placeholder="Enter your confirm password">                                                    
+                                                    </div>
+                                                    
+
+                                                          
+
+                                                    <br>
+                                                    
+
+                                                    <div class="text-center">
+                                                        <button class="btn btn-primary w-md waves-effect waves-light" type="submit" id="user-register" value="Submit" >Register</button>
+                                                    </div>
+                                                    <div class="mt-5 text-center">
+                                                        <p>Already have an account ? <a href="{__percentage_url 'auth-login' %}" class="fw-medium text-primary"> Login</a> </p>
+                                                        
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="authentication-bg position-relative">
+                            <div class="bg-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT -->
+        
+
+
+    </body>
+</html>

@@ -1,0 +1,89 @@
+/* .metismenu li{
+    position:relative;
+}
+.delete_icons {
+    position: absolute;
+    right: 12px;
+    top: 9px;
+} */
+
+.add_new_project_button{
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.delete_icon{
+    display: none !important;
+    margin-bottom: 0;
+    position: absolute;
+    right: 8px;
+    top: 12px;
+}
+.mm-show li:hover > .delete_icon{
+    display:block !important;
+    color: #ef5350;
+}
+.delete_button{
+    position: absolute;
+    cursor:pointer;
+    font-weight: bold;
+    font-size: 22px;
+}
+#add_dashboard_modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.add_dashboard {
+    width: 9em;
+    height: 3em;
+    border-radius: 30em;
+    font-size: 15px;
+    font-family: inherit;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 6px 6px 12px #c5c5c5,
+                -6px -6px 12px #ffffff;
+   }
+   
+   .add_dashboard::before {
+    content: '';
+    width: 0;
+    height: 3em;
+    border-radius: 30em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to right, #0fd850 0%, #f9f047 100%);
+    transition: .5s ease;
+    display: block;
+    z-index: -1;
+   }
+   
+   .add_dashboard:hover::before {
+    width: 9em;
+   }
+
+   .cbtn {
+    border: 0;
+    padding: 8px 14px;
+    border-radius: 4px;
+    transition:all 0.5s;
+}
+
+.bg_color_blue{
+    background:#00589e ;
+    color: #fff;
+}
+
+.alternate-row {
+    background-color: yellow;
+    /* Add any other desired styling */
+}
+
+#add_dashboard:hover {
+    opacity: 1.5;
+}

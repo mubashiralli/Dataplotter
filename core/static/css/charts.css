@@ -1,0 +1,448 @@
+.select2-dropdown {
+    position: absolute !important;
+    top: auto !important;
+}
+.delete_chart_spinner {
+    --size: 30px;
+    --first-block-clr: #00589e;
+    --second-block-clr: #157eab;
+    --clr: #111;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    opacity: 75%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+button.dropdown-item.button-item.delete-button {
+    position: absolute;
+    right: 6px;
+    width: auto;
+    padding: 0;
+}
+button#update_basket {
+    position: absolute;
+    right: 20px;
+}
+#cahrt_views{
+    gap:5px;
+    margin:0px 0 10px;
+}
+#cahrt_views button{
+    border: 0;
+    padding: 6px 8px;
+    background: #ddd;
+    font-size:13px;
+}
+#cahrt_views button svg{
+    margin-right:px;
+}
+#cahrt_views button.active{
+    background: #00589e;
+    color: #fff;
+}
+.grid_view_con > div{
+    display:inline-block;
+    width:49%;
+}
+.grid_view_con > div:nth-child(odd){
+    margin-right:1.6%;
+}
+.filters_con{
+    margin: 10px 0 0px;
+}
+.icon_round{
+    border-radius: 50px;
+    border: none;
+    background-color: #157eab;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    cursor:pointer;
+    position: relative;
+}
+.icon_round svg{
+font-size: 14px;
+    position: absolute;
+    top: 13px;
+    left: 13px;
+}
+.blue_bg{
+    background:#00589e;
+}
+.light_blue_bg{
+    background:#157eab;
+}
+.green_bg{
+    background:#22e5cb;
+    color:#00589e;
+}
+
+.fadein{
+transition: all ease .2s;
+}
+.top_content_fixed{
+    position: fixed;
+    z-index: 999;
+    background: #f1f5f7;
+    width: 80.6%;
+    padding-top:15px;
+    top: 50px;
+}
+.top_content_fixed #navbar{
+    margin:10px 0px 6px !important;
+}
+.delete_chart_spinner::after,.delete_chart_spinner::before {
+box-sizing: border-box;
+position: absolute;
+content: "";
+width: var(--size);
+height: var(--size);
+top: 50%;
+animation: up 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+left: 50%;
+background: var(--first-block-clr);
+}
+
+.delete_chart_spinner::after {
+background: var(--second-block-clr);
+top: calc(50% - var(--size));
+left: calc(50% - var(--size));
+animation: down 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+}
+
+@keyframes down {
+0%, 100% {
+    transform: none;
+}
+
+25% {
+    transform: translateX(100%);
+}
+
+50% {
+    transform: translateX(100%) translateY(100%);
+}
+
+75% {
+    transform: translateY(100%);
+}
+}
+
+@keyframes up {
+0%, 100% {
+    transform: none;
+}
+
+25% {
+    transform: translateX(-100%);
+}
+
+50% {
+    transform: translateX(-100%) translateY(-100%);
+}
+
+75% {
+    transform: translateY(-100%);
+}
+}
+.custom-option {
+    height: auto;
+    background: skyblue;
+    margin-bottom: 3px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.dropdown li{
+    display: flex;
+}
+.checkbox-input {
+    float: left;
+    margin-right: 5px;
+  }
+  
+  .button-item {
+    display: inline-block;
+  }
+  
+
+/* The switch - the box around the slider */
+.switch {
+    font-size: 14px;
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 24px;
+  }
+  
+  
+/* The slider */
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #fff;
+color: #000;
+font-weight: 600;
+border-radius: 30px;
+display: flex;
+justify-content: space-around;
+align-items: center;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "Edit";
+height: 90%;
+width: 48%;
+left: 2%;
+border-radius: 20px;
+background-color: white;
+color: #157eab;
+display: grid;
+align-content: center;
+justify-content: center;
+box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0 -1.31em 1.31em -1.31em rgba(0, 0, 0, 0.3) inset, 0 0 1px 0 rgba(0, 0, 0, 0.1);
+text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+transition: .4s;
+}
+
+.slider:after {
+content: "";
+position: absolute;
+top: -7px;
+left: -7px;
+right: -7px;
+bottom: -7px;
+border-radius: 1.71em;
+background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.1));
+z-index: -1;
+}
+
+.switch input:checked + .slider {
+background-color: #157eab;
+color: #fff;
+}
+.switch input:checked + .slider:before {
+content: "View";
+transform: translateX(100%);
+color: #157eab;
+}
+
+.switch input {
+display: none;
+}
+
+.select2-results__options{
+    /* padding-bottom: 10px; */
+    background-color: #fff;
+}
+.select2-results__options li{
+    background: #157eab;
+    margin-bottom: 3px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.custom-option{
+    padding-bottom: 2px;
+}
+
+#sort{
+    background: skyblue;
+}
+.select2-selection__rendered{
+    background: skyblue;
+}
+li.select2-selection__choice{
+    text-wrap:balance;
+}
+#select2-dimension-container,#select2-breakdown_dimension-container,#select2-metric-container{
+    color: #444;
+    line-height: 21px;
+}
+#select2-sort-container{
+    color: #444;
+    line-height: 26px;
+}
+#editdimension,#editbreakdowndimension, #editmetric, #editsort{
+    background: skyblue;
+    border: none;
+    outline: none;
+}
+
+.edit-button .hover-icon {
+    display: none;
+}
+
+.edit-button:hover .default-icon {
+display: none;
+}
+
+.edit-button:hover .hover-icon {
+display: inline-block;
+}
+
+.default-icon{
+    font-size: 10px !important;
+}
+  
+.modal {
+display: none !important; /* Hide the modal by default */
+}
+
+.modal.show {
+display: block !important; /* Show the modal when the 'show' class is added */
+position: absolute; /* Position the modal absolutely */
+z-index: 1050; /* Set a higher z-index to ensure it appears above other elements */
+}
+#editmetricModal .modal-dialog {
+    position: fixed;
+    top: 75%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    margin: 0;
+    width: 18%;
+}
+button.dashed {border-style: dashed;border-width: 1px;}
+
+#breakdown_dimension + .select2-container {
+    display: none;
+    width:100% !important;
+    margin-left:4px;
+}
+#dimension + .select2-container {
+    /* display: none; */
+    width:88% !important;
+    margin-left:4px;
+}
+
+#add_breakdown_dimension
+{
+    background-color: #fff;
+}
+button.close {
+    border: 0;
+    background: none;
+    font-size: 26px;
+    margin: 0;
+    padding: 0;
+    line-height: .5;
+    transition:all ease-in-out .2;
+}
+button.close:hover{
+    opacity:.8;
+}
+.right_panel{
+    background:none;
+    box-shadow:0 0 0;
+}
+.right_panel .card-body{
+    background:#fff;
+    /* height: 85vh; */
+}
+.box_close{
+    position: absolute;
+    right: 20px;
+    /* top: 25px; */
+}
+#edit_chart_heading{
+    margin-right:20px;
+}
+#edit_chart_heading:focus-visible{
+    padding: 5px;
+    font-size: 18px;
+    outline-color: #ccc;
+    outline-width: 1px;
+    outline-style: auto;
+}
+#navbar_container .dropdown-menu{
+    padding: 5px 12px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+#navbar_container .dropdown li {
+    display: flex;
+    align-items: center;
+}
+#basketbtn .dropdown-item {
+    padding-left: 5px;
+}
+.navbar{
+    background-color: skyblue;
+}
+.right_sidebar_fixed{
+    position: fixed;
+    top: 128px;
+    right: 0;
+    max-width:28.0%;
+}
+.margin_10{
+    margin-bottom:10px;
+}
+
+.only_btn {
+ text-align: right;
+ opacity: 0;
+ padding-right: 0;
+ transition:all ease-in-out .2s;
+}
+#navbar_container .dropdown li:hover .only_btn{
+ opacity: 1;
+}
+.bkt_name{
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 15px;
+}
+.edit-button{
+    width:auto !important;
+    padding: 0px 5px;
+}
+#show_edit_basket_modal > div,
+#show_basket_modal > div{
+    max-width:600px !important;
+}
+#edit_inclusive_column,#edit_exclusive_column,
+#inclusive_column,#exclusive_column,#select_date{
+    max-width:210px;
+}
+.edit_exclusive-filter-item .select2-selection__rendered,
+.edit_inclusive-filter-item .select2-selection__rendered,
+.exclusive-filter-item .select2-selection__rendered,
+.inclusive-filter-item .select2-selection__rendered{
+    overflow-y: auto !important;
+    max-height: 90px;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+#show_filter_panel #select2-filter_column-container{
+    width: 200px;
+}
+#dimension_sort_flag {
+    transform: scale(1.2);
+  }
+  

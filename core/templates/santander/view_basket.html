@@ -1,0 +1,3526 @@
+{% extends 'base.html' %} {% load static %} {% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/main.min.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/app.min.css' %}" type="text/css" />
+<link
+  rel="stylesheet"
+  href="{% static 'css/bootstrap.min.css' %}"
+  type="text/css"
+/>
+
+<!-- DataTables -->
+<link
+  href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="{% static 'libs/datatables.net-select-bs4/css//select.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+  crossorigin="anonymous"
+/>
+
+<!-- Responsive datatable examples -->
+<link
+  href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="{% static 'libs/apexhcarts/apexcharts.css' %}"
+  id="app-style"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.css"
+  rel="stylesheet"
+/>
+<!-- Responsive datatable examples -->
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+/>
+<style>
+  .spinner {
+    position: absolute;
+    left: calc(50% - 43px);
+    top: 47px;
+    z-index: 999;
+  }
+  .spinner1 {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 9999999;
+  }
+  .fa-spinner {
+    top: 49%;
+    position: absolute;
+  }
+  .comparison_chart_graph {
+    display: none;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 1200px;
+  }
+</style>
+{% endblock extra_css %} {% block extra_javascript %}
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  type="text/javascript"
+></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script
+  src="{% static 'js/pages/datatables.init.js' %}"
+  type="text/javascript"
+></script>
+<!-- <script src="https://www.watchmycompetitor.com/content/lib/jqueryUI/jquery-ui.js"></script> -->
+<script
+  src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"
+  type="text/javascript"
+></script>
+
+<!-- Buttons examples -->
+
+<!-- <script src="https://data.jsdelivr.com/v1/package/npm/busy-load/badge)](https://www.jsdelivr.com/package/npm/busy-load"></script> -->
+<script
+  src="{% static 'libs/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"
+  type="text/javascript"
+></script>
+<script
+  src="{% static 'libs/datatables.net-select/js/dataTables.select.min.js' %}"
+  type="text/javascript"
+></script>
+<script
+  src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"
+  type="text/javascript"
+></script>
+<script src="{% static 'libs/metismenu/metisMenu.min.js' %}"></script>
+
+<!-- Add HighCharts Libraries -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script
+  src="https://code.highcharts.com/modules/accessibility.js"
+  type="text/javascript"
+></script>
+
+<!-- Add DataTable DateTime Library -->
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+
+<!-- Datatable init js -->
+<script src="https://cdn.jsdelivr.net/npm/busy-load/dist/app.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<link
+  href="{% static 'libs/apexcharts/apexcharts.css' %}"
+  id="app-style"
+  rel="stylesheet"
+  type="text/css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+
+<script src="/static/js/draggable.min.js"></script>
+<script src="/static/js/dragula.min.js"></script>
+
+<script
+  src="/static/js/chartjs-plugin-datalabels.min.js"
+  type="text/javascript"
+></script>
+<script
+  src="/static/js/jquery-ui.multidatespicker.js"
+  type="text/javascript"
+></script>
+
+<script src="https://www.watchmycompetitor.com/Content/js/html2canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
+
+<script>
+  function linechart(graph_id, graph_div_id, graph_name, graph_label) {
+    $(".spinner1").removeClass("d-none");
+    //var month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+    var spliting_date_length = datepicker_value.split(",").length;
+    ////////alert(datepicker_value);
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'all_graphs_basket' %}?basket_id=" +
+        basket_id +
+        "&date=" +
+        datepicker_value +
+        "&project_id=" +
+        project_id +
+        "",
+    }).then(function (response) {
+      $(".spinner1").addClass("d-none");
+
+      if (spliting_date_length == 1) {
+        label = graph_label + "_labels";
+        data = graph_label + "_data";
+
+        plotsinglechart(
+          response.data[label],
+          response.data[data],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response,
+          "line"
+        );
+      } else {
+        retailer = graph_label;
+
+        plotmultichart(
+          response.data[retailer][0]["labels"],
+          response.data[retailer],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response.data.month_names,
+          response.data.months_length,
+          "line"
+        );
+        /*
+				multiple_bars_chartjs_graph_onchange(response.data.customer_deposit[0]['labels'],response.data.customer_deposit,'customer_deposit','#customer_deposit_graph','Customer Deposit',response.data.month_names,response.data.months_length)				
+				multiple_bars_chartjs_graph_onchange(response.data.monthly_payment[0]['labels'],response.data.monthly_payment,'monthly_payment','#monthly_payment_graph','Monthly Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.representative_apr[0]['labels'],response.data.representative_apr,'representative_apr','#representative_apr_graph','Representative APR',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.on_the_road_price[0]['labels'],response.data.on_the_road_price,'on_the_road_price','#on_the_road_price_graph','On The Road Price',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.purchase_final_payment[0]['labels'],response.data.purchase_final_payment,'purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.duration_of_agreement[0]['labels'],response.data.duration_of_agreement,'duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.amount_of_credit[0]['labels'],response.data.amount_of_credit,'amount_of_credit','#amount_of_credit_graph','Amount Of Credit',response.data.month_names,response.data.months_length)
+				*/
+      }
+    });
+  }
+
+  function barchart(graph_id, graph_div_id, graph_name, graph_label) {
+    $(".spinner1").removeClass("d-none");
+    //var month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+    var spliting_date_length = datepicker_value.split(",").length;
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'all_graphs_basket' %}?basket_id=" +
+        basket_id +
+        "&date=" +
+        datepicker_value +
+        "&project_id=" +
+        project_id +
+        "",
+    }).then(function (response) {
+      $(".spinner1").addClass("d-none");
+
+      if (spliting_date_length == 1) {
+        label = graph_label + "_labels";
+        data = graph_label + "_data";
+
+        plotsinglechart(
+          response.data[label],
+          response.data[data],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response,
+          "bar"
+        );
+      } else {
+        retailer = graph_label;
+        plotmultichart(
+          response.data[retailer][0]["labels"],
+          response.data[retailer],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response.data.month_names,
+          response.data.months_length,
+          "bar"
+        );
+        /*
+				multiple_bars_chartjs_graph_onchange(response.data.customer_deposit[0]['labels'],response.data.customer_deposit,'customer_deposit','#customer_deposit_graph','Customer Deposit',response.data.month_names,response.data.months_length)				
+				multiple_bars_chartjs_graph_onchange(response.data.monthly_payment[0]['labels'],response.data.monthly_payment,'monthly_payment','#monthly_payment_graph','Monthly Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.representative_apr[0]['labels'],response.data.representative_apr,'representative_apr','#representative_apr_graph','Representative APR',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.on_the_road_price[0]['labels'],response.data.on_the_road_price,'on_the_road_price','#on_the_road_price_graph','On The Road Price',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.purchase_final_payment[0]['labels'],response.data.purchase_final_payment,'purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.duration_of_agreement[0]['labels'],response.data.duration_of_agreement,'duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.amount_of_credit[0]['labels'],response.data.amount_of_credit,'amount_of_credit','#amount_of_credit_graph','Amount Of Credit',response.data.month_names,response.data.months_length)
+				*/
+      }
+    });
+  }
+
+  function doughnutchart(graph_id, graph_div_id, graph_name, graph_label) {
+    $(".spinner1").removeClass("d-none");
+    //var month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+    var spliting_date_length = datepicker_value.split(",").length;
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'all_graphs_basket' %}?basket_id=" +
+        basket_id +
+        "&date=" +
+        datepicker_value +
+        "&project_id=" +
+        project_id +
+        "",
+    }).then(function (response) {
+      $(".spinner1").addClass("d-none");
+
+      if (spliting_date_length == 1) {
+        label = graph_label + "_labels";
+        data = graph_label + "_data";
+
+        plotsinglechart(
+          response.data[label],
+          response.data[data],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response,
+          "doughnut"
+        );
+      } else {
+        retailer = graph_label;
+        plotmultichart(
+          response.data[retailer][0]["labels"],
+          response.data[retailer],
+          graph_id,
+          graph_div_id,
+          graph_name,
+          response.data.month_names,
+          response.data.months_length,
+          "doughnut"
+        );
+        /*
+				multiple_bars_chartjs_graph_onchange(response.data.customer_deposit[0]['labels'],response.data.customer_deposit,'customer_deposit','#customer_deposit_graph','Customer Deposit',response.data.month_names,response.data.months_length)				
+				multiple_bars_chartjs_graph_onchange(response.data.monthly_payment[0]['labels'],response.data.monthly_payment,'monthly_payment','#monthly_payment_graph','Monthly Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.representative_apr[0]['labels'],response.data.representative_apr,'representative_apr','#representative_apr_graph','Representative APR',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.on_the_road_price[0]['labels'],response.data.on_the_road_price,'on_the_road_price','#on_the_road_price_graph','On The Road Price',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.purchase_final_payment[0]['labels'],response.data.purchase_final_payment,'purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.duration_of_agreement[0]['labels'],response.data.duration_of_agreement,'duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.amount_of_credit[0]['labels'],response.data.amount_of_credit,'amount_of_credit','#amount_of_credit_graph','Amount Of Credit',response.data.month_names,response.data.months_length)
+				*/
+      }
+    });
+  }
+
+  function download(graph_id) {
+    // Get the canvas element
+    var canvas = document.getElementById(graph_id);
+    // Create a new jspdf instance
+
+    //var pdf = new jsPDF('p', 'mm', 'a4');
+    var doc = new jsPDF("p", "mm", "a4");
+
+    doc.setFontSize(18);
+    doc.setFontStyle("bold");
+
+    // Add the text to the middle of the page
+    var chart_title = $("#" + graph_id)
+      .parent()
+      .prev("h4")
+      .text();
+    var textWidth =
+      (doc.getStringUnitWidth(chart_title) * doc.internal.getFontSize()) /
+      doc.internal.scaleFactor;
+    var margin = (doc.internal.pageSize.width - textWidth) / 2;
+    doc.text(chart_title, margin, 12);
+
+    var imgData = canvas.toDataURL("image/png");
+    /*
+		if (canvas.width > canvas.height) {
+			doc = new jsPDF('l', 'mm', [canvas.width, canvas.height]);
+		}
+		else {
+			doc = new jsPDF('p', 'mm', [canvas.height, canvas.width]);
+		}
+		*/
+    var imgProps = doc.getImageProperties(imgData);
+    var pdfWidth = doc.internal.pageSize.getWidth() - 20;
+    var pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    doc.addImage(imgData, "JPEG", 0, 20, pdfWidth, pdfHeight);
+
+    // Convert the canvas to a data URL and add it to the PDF
+    //doc.addImage(canvas.toDataURL(), 'JPEG',  0, 20);
+
+    // Save the PDF
+    doc.save(chart_title + ".pdf");
+  }
+
+  function comparison(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    column_names,
+    month_names
+  ) {
+    let month1 = selectize.getValue();
+
+    ////////////alert(graph_id)
+    ////////////alert(graph_div_id)
+
+    document.getElementById(graph_id).remove();
+
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+    document.querySelector(graph_div_id).appendChild(canvas);
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //retailer_contribution_heading = document.getElementById(graph_heading)
+    //retailer_contribution_heading.innerHTML += ' & ' + response.data.second_month;
+
+    //console.log('Labels: ' + labels)
+    //console.dir(data, {'maxArrayLength': null})
+    //console.log('Month Names: ', month_names)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    for (var i = 0; i < 2; i++) {
+      datasets.push({
+        label: column_names[i],
+        backgroundColor: backgroundColor[i],
+        data: data[i]["data"],
+      });
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets,
+    };
+
+    //console.log('Comparison Data: ' + data['datasets'][0])
+    //console.dir(data, {'maxArrayLength': null});
+
+    var myBarChart = new Chart(ctx1, {
+      type: "bar",
+      data: data,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                display: true,
+                text: "",
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: graph_name,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function two_column_comparison(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    column_names,
+    month_names,
+    bars_length
+  ) {
+    //let month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //console.log('Labels: ' + labels)
+
+    //console.log('Month Names: ', month_names)
+    //////////alert(bars_length)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    if (datepicker_value.indexOf(",") < 0) {
+      for (var i = 0; i < bars_length; i++) {
+        datasets.push({
+          label: column_names[i],
+          backgroundColor: backgroundColor[i],
+          data: data[i]["data"],
+        });
+      }
+      var data = {
+        labels: labels,
+        datasets: datasets,
+      };
+
+      //console.log('Comparison Data: ' + data['datasets'][0])
+      //console.dir(data, {'maxArrayLength': null});
+
+      var myBarChart = new Chart(ctx1, {
+        type: "bar",
+        data: data,
+        options: {
+          barValueSpacing: 20,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  display: true,
+                  text: "",
+                },
+              },
+            ],
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "",
+              },
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      total_columns = column_names.length;
+      for (var i = 0; i < bars_length; i++) {
+        if (i < 2) {
+          if (i % total_columns == 0) {
+            column = column_names[0];
+            background = backgroundColor[0];
+          } else {
+            column = column_names[1];
+            background = backgroundColor[1];
+          }
+          label = column;
+          datasets.push({
+            label: label,
+            backgroundColor: background,
+            data: data[i]["data"],
+          });
+        } else {
+          if (i % total_columns == 0) {
+            column = column_names[0];
+            background = backgroundColor[0];
+          } else {
+            column = column_names[1];
+            background = backgroundColor[1];
+          }
+          label = column;
+          datasets.push({
+            label: label,
+            backgroundColor: background,
+            data: data[i]["data"],
+          });
+        }
+      }
+
+      var data = {
+        labels: labels,
+        datasets: datasets,
+      };
+
+      //console.log('Comparison Data: ' + data['datasets'][0])
+      //console.dir(data, {'maxArrayLength': null});
+
+      var myBarChart = new Chart(ctx1, {
+        type: "bar",
+        data: data,
+        options: {
+          plugins: {
+            legend: false,
+          },
+          barValueSpacing: 20,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  display: true,
+                  text: "",
+                },
+              },
+            ],
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "",
+              },
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  function get_two_column_comparison(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    column_names,
+    month_names,
+    bars_length
+  ) {
+    //let month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //console.log('Labels: ' + labels)
+
+    //console.log('Month Names: ', month_names)
+    //////////alert(bars_length)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    if (datepicker_value.indexOf(",") < 0) {
+      for (var i = 0; i < data.length; i++) {
+        datasets.push({
+          label: column_names[i],
+          backgroundColor: backgroundColor[i],
+          data: data[i]["data"],
+        });
+      }
+      var data = {
+        labels: labels,
+        datasets: datasets,
+      };
+
+      //console.log('Comparison Data: ' + data['datasets'][0])
+      //console.dir(data, {'maxArrayLength': null});
+
+      var myBarChart = new Chart(ctx1, {
+        type: "bar",
+        data: data,
+        options: {
+          barValueSpacing: 20,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  display: true,
+                  text: "",
+                },
+              },
+            ],
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "",
+              },
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      console.dir(data, { maxArrayLength: null });
+      //////////alert(bars_length)
+      total_columns = column_names.length;
+      for (var i = 0; i < data.length; i++) {
+        if (i < 2) {
+          if (i % total_columns == 0) {
+            column = column_names[0];
+            background = backgroundColor[0];
+          } else {
+            column = column_names[1];
+            background = backgroundColor[1];
+          }
+          label = column;
+          datasets.push({
+            label: label,
+            backgroundColor: background,
+            data: data[i]["data"],
+          });
+        } else {
+          //////////alert(i)
+          //////////alert(total_columns)
+          if (i % total_columns == 0) {
+            //////////alert('IF')
+            column = column_names[0];
+            background = backgroundColor[0];
+          } else {
+            //////////alert('ELSE')
+            column = column_names[1];
+            background = backgroundColor[1];
+          }
+          //////////alert(column)
+          label = column;
+          datasets.push({
+            label: label,
+            backgroundColor: background,
+            data: data[i]["data"],
+          });
+        }
+      }
+
+      var data = {
+        labels: labels,
+        datasets: datasets,
+      };
+
+      //console.log('Comparison Data: ' + data['datasets'][0])
+      //console.dir(data, {'maxArrayLength': null});
+
+      var myBarChart = new Chart(ctx1, {
+        type: "bar",
+        data: data,
+        options: {
+          plugins: {
+            legend: false,
+          },
+          barValueSpacing: 20,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  display: true,
+                  text: "",
+                },
+              },
+            ],
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "",
+              },
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  function selected_column_comparison(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    column_names,
+    month_names
+  ) {
+    let month1 = selectize.getValue();
+
+    document.getElementById(graph_id).remove();
+
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+    document.querySelector(graph_div_id).appendChild(canvas);
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //retailer_contribution_heading = document.getElementById(graph_heading)
+    //retailer_contribution_heading.innerHTML += ' & ' + response.data.second_month;
+
+    //console.log('Labels: ' + labels)
+    //console.dir(data, {'maxArrayLength': null})
+    //console.log('Month Names: ', month_names)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    for (var i = 0; i < 1; i++) {
+      datasets.push({
+        label: column_names[i],
+        backgroundColor: backgroundColor[i],
+        data: data[i]["data"],
+      });
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets,
+    };
+
+    //console.log('Comparison Data: ' + data['datasets'][0])
+    //console.dir(data, {'maxArrayLength': null});
+
+    var myBarChart = new Chart(ctx1, {
+      type: "bar",
+      data: data,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                display: true,
+                text: "",
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "",
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function multiple_months_comparison(response) {
+    document.getElementById("comparison").remove();
+
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", "comparison");
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+
+    document.querySelector("#comparison_graph").appendChild(canvas);
+
+    const ctx1 = document.getElementById("comparison").getContext("2d");
+
+    labels = response.data[0].labels;
+    ////////////////alert(labels)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+    ];
+    datasets = [];
+    stack = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+
+    var keys = Object.keys(response.data[0]);
+    last_element = keys.pop();
+    ////////////////alert('Keys: ' + keys)
+
+    columns = response.columns.sort();
+    ////////////////alert('Columns: '+ columns)
+
+    for (var i = 0; i < response.data.length; i++) {
+      ////////////////alert(columns[i])
+
+      column = columns[i];
+      next_column = columns[i + 1];
+
+      datasets.push(
+        {
+          label: keys[0],
+          backgroundColor: "#848fdf",
+          stack: response.month_names[i],
+          data: response.data[i][column],
+        },
+        {
+          label: keys[1],
+          backgroundColor: "thistle",
+          stack: response.month_names[i],
+          data: response.data[i][next_column],
+        }
+      );
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets,
+    };
+
+    var myBarChart = new Chart(ctx1, {
+      type: "bar",
+      data: data,
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+
+        tooltips: {
+          enabled: false,
+        },
+        responsive: true,
+
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: "",
+            },
+          },
+          xAxes: [
+            {
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: "Month",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              display: true,
+              scaleLabel: {
+                display: true,
+              },
+            },
+          ],
+        },
+      },
+    });
+  }
+</script>
+
+<script>
+  function generate_comparison_chart() {
+    //var month1 = selectize.getValue();
+    datepicker_value = document.getElementById("datepicker").value;
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    selected_column1_value = $("#comparison_column1").val();
+    selected_column2_value = $("#comparison_column2").val();
+    //////alert(selected_column1_value)
+    //////alert(selected_column2_value)
+
+    if (selected_column1_value && selected_column2_value) {
+      if (
+        selected_column1_value == "Car Make" ||
+        selected_column1_value == "Car Model" ||
+        selected_column1_value == "Type of Finance" ||
+        selected_column2_value == "Car Make" ||
+        selected_column2_value == "Car Model" ||
+        selected_column2_value == "Type of Finance"
+      ) {
+        $("#exampleModal").modal("hide");
+        $("#verifyModal").modal("show");
+      } else {
+        $.ajax({
+          url:
+            "{percantage url 'generate_comparison_chart_basket'%}?basket_id=" +
+            basket_id +
+            "&date=" +
+            datepicker_value +
+            "&selected_column1=" +
+            selected_column1_value +
+            "&selected_column2=" +
+            selected_column2_value +
+            "&project_id=" +
+            project_id +
+            "",
+          method: "GET",
+          success: function (response) {
+            $("#exampleModal").modal("hide");
+            ////////alert(datepicker_value.indexOf(','))
+            if (datepicker_value.indexOf(",") < 0) {
+              ////////////////alert()
+              $(".comparison_chart_graph").toggle();
+
+              count = response.total_comparison_charts;
+              bars_length = response.total_bars_length;
+              //////////alert(count)
+              //console.log('Response: '+response.comparison_chart[0]['labels'])
+
+              $(".card-container-category-column:last").after(
+                '<div class="col-md-6 card-container-category-column " id="comparison_columns_chart">\
+								<div class="card">\
+									<div class="card-body">\
+										<div class="float-end d-none d-md-inline-block">\
+											<div class="btn-group mb-2">\
+											</div>\
+										</div>\
+										<h4 class="card-title mb-4 comparison_chart' +
+                  count +
+                  '"></h4>\
+										<div id="comparison_graph' +
+                  count +
+                  '">\
+											<canvas id="comparison' +
+                  count +
+                  '" width="400" height="200" ></canvas>\
+										</div>\
+										<i class="fa fa-download" aria-hidden="true" onclick="download("comparison");" style="cursor: pointer;"></i>\
+									</div>\
+								</div>\
+							</div>'
+              );
+
+              canvas_id = "comparison" + count;
+              graph_id = "comparison_graph" + count;
+
+              two_column_comparison(
+                response.comparison_chart[0]["labels"],
+                response.comparison_chart,
+                canvas_id,
+                graph_id,
+                "Price",
+                response.columns,
+                response.month_names,
+                bars_length
+              );
+
+              var comparison_columns_array = response.columns;
+              $(".comparison_chart" + count).html(
+                comparison_columns_array[0] +
+                  " VS " +
+                  comparison_columns_array[1]
+              );
+
+              $("#exampleModal")
+                .find(".modal-body tbody")
+                .append(
+                  '<tr><td style="word-break: break-all;">' +
+                    comparison_columns_array[0] +
+                    '</td><td>VS</td><td style="word-break: break-all;">' +
+                    comparison_columns_array[1] +
+                    '</td><td><a href="javascript:;" onclick=DeleteComparisonChart("' +
+                    canvas_id +
+                    '","' +
+                    count +
+                    '","' +
+                    username +
+                    '")>Delete</a></td>'
+                );
+            } else {
+              count = response.total_comparison_charts;
+              bars_length = response.total_bars_length;
+              //////////alert(count)
+
+              //console.log('Response: '+response.comparison_chart[0]['labels'])
+
+              $(".card-container-category-column:last").after(
+                '<div class="col-md-6 card-container-category-column " id="comparison_columns_chart">\
+								<div class="card">\
+									<div class="card-body">\
+										<div class="float-end d-none d-md-inline-block">\
+											<div class="btn-group mb-2">\
+											</div>\
+										</div>\
+										<h4 class="card-title mb-4 comparison_chart' +
+                  count +
+                  '"></h4>\
+										<div id="comparison_graph' +
+                  count +
+                  '">\
+											<canvas id="comparison' +
+                  count +
+                  '" width="400" height="200" ></canvas>\
+										</div>\
+										<i class="fa fa-download" aria-hidden="true" onclick="download("comparison");" style="cursor: pointer;"></i>\
+									</div>\
+								</div>\
+							</div>'
+              );
+
+              canvas_id = "comparison" + count;
+              graph_id = "comparison_graph" + count;
+
+              two_column_comparison(
+                response.comparison_chart[0]["labels"],
+                response.comparison_chart,
+                canvas_id,
+                graph_id,
+                "Price",
+                response.columns,
+                response.month_names,
+                bars_length
+              );
+
+              var comparison_columns_array = response.columns;
+              $(".comparison_chart" + count).html(
+                comparison_columns_array[0] +
+                  " VS " +
+                  comparison_columns_array[1]
+              );
+
+              $("#exampleModal")
+                .find(".modal-body tbody")
+                .append(
+                  '<tr><td style="word-break: break-all;">' +
+                    comparison_columns_array[0] +
+                    '</td><td>VS</td><td style="word-break: break-all;">' +
+                    comparison_columns_array[1] +
+                    '</td><td><a href="javascript:;" onclick=DeleteComparisonChart("' +
+                    canvas_id +
+                    '","' +
+                    count +
+                    '","' +
+                    username +
+                    '")>Delete</a></td>'
+                );
+            }
+            scroll_graph = "#comparison" + count;
+            $("html, body").animate(
+              {
+                scrollTop: $(scroll_graph).offset().top,
+              },
+              2000
+            );
+          },
+        });
+      }
+    } else {
+      ////alert('Please Select Both Columns');
+      //document.getElementById("selectcolumns").showModal();
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  function settitle(month_year) {
+    //////////////////alert(month_year);
+    var h4 = document.getElementById("data");
+    $("#data").empty();
+    h4.innerHTML += "Basket Detail - " + month_year;
+  }
+
+  function chartjs_graph(labels, data, graph_id, graph_name) {
+    //var bg_colors = data_arr.map( item => getRandomColor() );
+
+    const ctx = document.getElementById(graph_id).getContext("2d");
+    const myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: graph_name,
+            data: data,
+            backgroundColor: "#848fdf",
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            //beginAtZero: true
+            title: {
+              display: true,
+              text: "Price",
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            ticks: {
+              maxRotation: 90,
+              minRotation: 60,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: true,
+          },
+        },
+      },
+    });
+  }
+
+  function chartjs_graph_onchange(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name
+  ) {
+    //var bg_colors = data_arr.map( item => getRandomColor() );
+
+    document.getElementById(graph_id).remove();
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+    document.querySelector(graph_div_id).appendChild(canvas);
+
+    const ctx = document.getElementById(graph_id).getContext("2d");
+    const myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: graph_name,
+            data: data,
+            backgroundColor: "#848fdf",
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            //beginAtZero: true
+            title: {
+              display: true,
+              text: "Price",
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            ticks: {
+              maxRotation: 90,
+              minRotation: 60,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: true,
+          },
+        },
+      },
+    });
+  }
+
+  function single_bar_chartjs_graph_onchange(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    graph_heading,
+    response,
+    colors,
+    sorted_colors,
+    graphs_color
+  ) {
+    //var month1 = selectize.getValue();
+    ////alert(graph_id + ': ' + graphs_color)
+
+    document.getElementById(graph_id).remove();
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+
+    canvas.width = 800;
+    canvas.height = 800;
+
+    document.querySelector(graph_div_id).appendChild(canvas);
+
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //console.dir(chart_colors, {'maxArrayLength': null})
+
+    myChart = new Chart(ctx1, {
+      type: "bar",
+
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: graph_name,
+            data: data,
+            backgroundColor: graphs_color,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+
+        scales: {
+          y: {
+            //beginAtZero: true
+            title: {
+              display: true,
+              text: graph_name,
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            ticks: {
+              //maxRotation: 90,
+              //minRotation: 40,
+              //mirror: true,
+              //color: "green",
+              z: 1,
+              //beginAtZero: true,
+              color: "#00589e",
+              font: {
+                size: 10, //this change the font size
+              },
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function multiple_bars_chartjs_graph_onchange(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    month_names,
+    months_length,
+    response,
+    colors
+  ) {
+    var assign_chart_colors = new Array();
+
+    for (var color in response.data.assign_colors_to_cars) {
+      for (var index = 0; index < labels.length; index++) {
+        if (labels[index] == color) {
+          assign_chart_colors.push(response.data.assign_colors_to_cars[color]);
+        }
+      }
+    }
+    //let month1 = selectize.getValue();
+
+    document.getElementById(graph_id).remove();
+
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+    document.querySelector(graph_div_id).appendChild(canvas);
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //retailer_contribution_heading = document.getElementById(graph_heading)
+    //retailer_contribution_heading.innerHTML += ' & ' + response.data.second_month;
+
+    //console.log('Labels: ' + labels)
+    //console.log('Data: ' + data)
+    //console.log('Month Names: ', month_names)
+    //console.log('Months Length: ', months_length)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    for (var i = 0; i < months_length; i++) {
+      datasets.push({
+        label: month_names[i],
+        backgroundColor: backgroundColor[i],
+        data: data[i]["data"],
+      });
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets,
+    };
+
+    var myBarChart = new Chart(ctx1, {
+      type: "bar",
+      data: data,
+      options: {
+        responsive: true,
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                display: true,
+                text: graph_name,
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: graph_name,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function plotsinglechart(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    response,
+    type
+  ) {
+    //var month1 = selectize.getValue();
+    document.getElementById(graph_id).remove();
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+
+    document.querySelector(graph_div_id).appendChild(canvas);
+    //////////alert(graph_id)
+    document.getElementById(graph_id).style.width = "200px";
+    document.getElementById(graph_id).style.height = "200px";
+
+    //console.log('Canvas width: ',canvas.width)
+
+    //////////////////alert(month1)
+    ////console.log('Length of Response Data: '+ response.data.data.length);
+
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+    ctx1.canvas.height = 300;
+
+    var myChart = "";
+
+    myChart = new Chart(ctx1, {
+      type: type,
+
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: graph_name,
+            data: data,
+            backgroundColor: "#848fdf",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+
+        scales: {
+          y: {
+            //beginAtZero: true
+            title: {
+              display: true,
+              text: graph_name,
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            ticks: {
+              maxRotation: 90,
+              minRotation: 60,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+  }
+
+  function plotmultichart(
+    labels,
+    data,
+    graph_id,
+    graph_div_id,
+    graph_name,
+    month_names,
+    months_length,
+    type
+  ) {
+    let month1 = selectize.getValue();
+
+    document.getElementById(graph_id).remove();
+
+    let canvas = document.createElement("canvas");
+    canvas.setAttribute("id", graph_id);
+    canvas.setAttribute("width", "400");
+    canvas.setAttribute("height", "200");
+    document.querySelector(graph_div_id).appendChild(canvas);
+    const ctx1 = document.getElementById(graph_id).getContext("2d");
+
+    //retailer_contribution_heading = document.getElementById(graph_heading)
+    //retailer_contribution_heading.innerHTML += ' & ' + response.data.second_month;
+
+    //console.log('Labels: ' + labels)
+    //console.log('Data: ' + data)
+    //console.log('Month Names: ', month_names)
+    //console.log('Months Length: ', months_length)
+
+    backgroundColor = [
+      "#848fdf",
+      "thistle",
+      "plum",
+      "red",
+      "green",
+      "blue",
+      "black",
+      "orange",
+      "violet",
+      "yellow",
+      "gray",
+      "",
+    ];
+    datasets = [];
+
+    for (var i = 0; i < months_length; i++) {
+      datasets.push({
+        label: month_names[i],
+        backgroundColor: backgroundColor[i],
+        data: data[i]["data"],
+      });
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets,
+    };
+
+    var myBarChart = new Chart(ctx1, {
+      type: type,
+      data: data,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                display: true,
+                text: graph_name,
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: graph_name,
+            },
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function graph(data, graph_id, graph_name) {
+    var options = {
+      colors: ["#6f7bd9", "#3ec59d"],
+      series: [
+        {
+          name: graph_name,
+          type: "column",
+          data: data,
+        },
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+      },
+      stroke: {
+        width: [0, 4],
+      },
+
+      dataLabels: {
+        enabled: true,
+        enabledOnSeries: [1],
+      },
+      xaxis: {
+        type: "text",
+        labels: {
+          style: {
+            fontSize: "10px",
+            fontWeight: 200,
+          },
+
+          rotate: -30,
+        },
+      },
+      yaxis: [
+        {
+          title: {
+            text: "Price",
+          },
+        },
+      ],
+      tooltip: {
+        shared: false,
+      },
+    };
+
+    var chart = new ApexCharts(document.querySelector(graph_id), options);
+    chart.render();
+  }
+
+  function DeleteComparisonChart(comparison_graph_id, row_id, username) {
+    //////////alert(comparison_graph_id)
+    //////alert(row_id)
+    ////////////alert(username)
+
+    project_id = document.getElementById("project_id").value;
+
+    var result = confirm("Do You Want To Delete A Comparison Chart?");
+    if (result) {
+      axios({
+        method: "GET",
+        url:
+          "{percantage url 'delete_comparison_chart' %}?row_id=" +
+          row_id +
+          "&username=" +
+          username +
+          "&project_id=" +
+          project_id +
+          "",
+      }).then(function (response) {
+        document
+          .getElementById(comparison_graph_id)
+          .parentNode.parentNode.parentNode.remove();
+
+        //$('.comparison_chart').html('')
+        $("#exampleModal").modal("hide");
+
+        document.getElementById("Comparison_Table").deleteRow(row_id);
+        //window.location = response.data.id
+      });
+
+      //scroll_graph = '#comparison'+count
+      $("html, body").animate(
+        {
+          scrollTop: $(".card-container-category-column:last").offset().top,
+        },
+        2000
+      );
+    }
+  }
+</script>
+
+{% endblock extra_javascript %} {% block content %}
+
+<script>
+  function selectbasket(e) {
+    //////////////////alert(e.value);
+    basket_id = e.value;
+    //////alert(basket_id);
+    var project_id = document.getElementById("project_id").value;
+    //////alert(project_id)
+
+    var select_basket = document.getElementById("baskets");
+
+    axios({
+      method: "GET",
+      url: "{percantage url 'select-basket' %}?basket_id=" + basket_id + "",
+    }).then(function (response) {
+      //////alert(window.location)
+      window.location = response.data.id + "?project_id=" + project_id;
+      //////alert(window.location)
+    });
+  }
+  /*
+	function setcolumn(e){
+		
+		$('.spinner1').removeClass('d-none');
+		// FOR retailer_deposit_contribution
+		var month1 = selectize.getValue();
+		var column = selectize1.getValue();
+
+		//selected_column1_value =  $('#column').val();
+		
+		//$(".select option[value="+month+"]").attr('selected', 'selected');
+		
+		var basket_id = document.getElementById('basket_id').value;
+	
+		//////////////////alert(basket_id);
+		
+		//All Graphs On Change Method
+		axios({
+			method:'GET',
+			url: "{percantage url 'generate_selected_column_graphs' %}?basket_id="+basket_id+"&month="+month1+"&selected_column="+column+"",
+		}).then(function(response){
+			$('.spinner1').addClass('d-none');
+
+			////console.dir('Output: ', response)
+			
+			if (month1.length == 1){
+				selected_column_comparison(response.data.comparison_chart[0]['labels'],response.data.comparison_chart,'column','#column_graph','Price',response.data.columns,response.data.month_names)
+				var columns_array = response.data.columns;
+				$('.column_chart_heading').html(columns_array[0])
+			}
+			else
+			{
+				multiple_bars_chartjs_graph_onchange(response.data.retailer_contribution[0]['labels'],response.data.retailer_contribution,'retailer_deposit_contribution','#retailer_deposit_contribution_graph','Retailer Deposit Contribution',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.customer_deposit[0]['labels'],response.data.customer_deposit,'customer_deposit','#customer_deposit_graph','Customer Deposit',response.data.month_names,response.data.months_length)				
+				multiple_bars_chartjs_graph_onchange(response.data.monthly_payment[0]['labels'],response.data.monthly_payment,'monthly_payment','#monthly_payment_graph','Monthly Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.representative_apr[0]['labels'],response.data.representative_apr,'representative_apr','#representative_apr_graph','Representative APR',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.on_the_road_price[0]['labels'],response.data.on_the_road_price,'on_the_road_price','#on_the_road_price_graph','On The Road Price',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.purchase_final_payment[0]['labels'],response.data.purchase_final_payment,'purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.duration_of_agreement[0]['labels'],response.data.duration_of_agreement,'duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement',response.data.month_names,response.data.months_length)
+				multiple_bars_chartjs_graph_onchange(response.data.amount_of_credit[0]['labels'],response.data.amount_of_credit,'amount_of_credit','#amount_of_credit_graph','Amount Of Credit',response.data.month_names,response.data.months_length)
+				
+				
+			}
+			
+		});
+	}
+	*/
+  function setmonth(list) {
+    ////////alert(list)
+
+    var datepicker_value = $("#datepicker").val();
+    var spliting_date_length = datepicker_value.split(",").length;
+    //////alert(datepicker_value);
+    //////alert(spliting_date_length);
+
+    ////////alert(datepicker_value);
+    $(".spinner1").removeClass("d-none");
+    // FOR retailer_deposit_contribution
+    //var month1 = selectize.getValue();
+    //month = e.value;
+
+    //$(".select option[value="+month+"]").attr('selected', 'selected');
+
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    //////////////////alert(basket_id);
+
+    var table = $("#datatable2").DataTable();
+    table.destroy();
+    $('div[data-highcharts-chart="0"]').remove();
+    $('div[data-highcharts-chart="1"]').remove();
+    $('div[data-highcharts-chart="2"]').remove();
+    $('div[data-highcharts-chart="3"]').remove();
+    $('div[data-highcharts-chart="4"]').remove();
+    $('div[data-highcharts-chart="5"]').remove();
+    $('div[data-highcharts-chart="6"]').remove();
+    $('div[data-highcharts-chart="7"]').remove();
+    $('div[data-highcharts-chart="8"]').remove();
+    $('div[data-highcharts-chart="9"]').remove();
+    $('div[data-highcharts-chart="10"]').remove();
+    $('div[data-highcharts-chart="11"]').remove();
+    $('div[data-highcharts-chart="12]').remove();
+    $('div[data-highcharts-chart="13"]').remove();
+    $('div[data-highcharts-chart="14"]').remove();
+    $('div[data-highcharts-chart="15"]').remove();
+
+    $(document).ajaxStart(function () {
+      //////////////////alert('Start');
+    });
+
+    var table = $("#datatable2").DataTable({
+      initComplete: function (settings, json) {
+        processing: true;
+      },
+      ajax:
+        "{percantage url 'santandar-car-latest-data-basket-onchange' %}?basket_id=" +
+        basket_id +
+        "&date=" +
+        datepicker_value +
+        "&project_id=" +
+        project_id +
+        "",
+      drawCallback: function (settings) {
+        // Here the response
+        var response = settings.json;
+        //console.log(response.latest_month_year);
+        settitle(response.latest_month_year);
+      },
+      processing: true,
+      language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>',
+      },
+      searchPanes: {
+        cascadePanes: true,
+        viewTotal: true,
+        layout: "columns-4",
+        columns: [0, 1, 2, 3],
+      },
+      dom: "Plfrtip",
+
+      pagingType: "numbers",
+
+      sort: true,
+      columns: [
+        { data: "users.Date Extract Run", name: "Date Extract Run" },
+        { data: "users.Car Make", name: "Car Make" },
+        { data: "users.Car Model", name: "Car Model" },
+        { data: "users.Type of Finance", name: "TypeofFinance" },
+        { data: "users.Monthly Payment", name: "MonthlyPayment" },
+        { data: "users.Customer Deposit", name: "CustomerDeposit" },
+        {
+          data: "users.Retailer Deposit Contribution",
+          name: "RetailerDepositContribution",
+        },
+        { data: "users.Representative APR", name: "RepresentativeAPR" },
+        { data: "users.Total Amount Payable", name: "TotalAmountPayable" },
+        { data: "users.On The Road Price", name: "OnTheRoadPrice" },
+        { data: "users.Duration of Agreement", name: "DurationofAgreement" },
+        {
+          data: "users.Optional Purchase_Final Payment",
+          name: "OptionalPurchase_FinalPayment",
+        },
+        { data: "users.Amount of Credit", name: "AmountofCredit" },
+        {
+          data: "users.Option To Purchase_Purchase Activation Fee",
+          name: "OptionToPurchase_PurchaseActivationFee",
+        },
+        {
+          data: "users.Fixed Interest Rate_Rate of interest PA",
+          name: "FixedInterestRate_RateofinterestPA",
+        },
+        { data: "users.Excess Milage Charge", name: "ExcessMilageCharge" },
+        { data: "users.Average Miles Per Year", name: "AverageMilesPerYear" },
+        { data: "users.Retail Cash Price", name: "RetailCashPrice" },
+        { data: "users.Offer Expiry Date", name: "OfferExpiryDate" },
+        { data: "users.Deposit Percent", name: "DepositPercent" },
+        { data: "users.Final Payment Percent", name: "FinalPaymentPercent" },
+        { data: "users.Webpage URL", name: "WebpageURL" },
+        { data: "users.Carimage URL", name: "CarimageURL" },
+      ],
+
+      serverSide: true,
+      select: true,
+    });
+
+    $(document).ajaxStop(function () {
+      //////////////////alert('End');
+      ////console.log('End');
+      //$.busyLoadFull("hide");
+      //$(".overlay").removeClass("loading");
+    });
+
+    //All Graphs On Change Method
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'all_graphs_basket' %}?basket_id=" +
+        basket_id +
+        "&date=" +
+        datepicker_value +
+        "&project_id=" +
+        project_id +
+        "",
+    }).then(function (response) {
+      ////console.log(response.data)
+
+      //////////////////alert(month1.length);
+      $(".spinner1").addClass("d-none");
+      //$('.spinner1').addClass('d-none');
+      /*
+			chartjs_graph_onchange(response.data.retailer_contribution.labels,response.data.retailer_contribution.data,'retailer_deposit_contribution','#retailer_deposit_contribution_graph','Retailer Deposit Contribution')
+			chartjs_graph_onchange(response.data.customer_deposit.labels,response.data.customer_deposit.data,'customer_deposit','#customer_deposit_graph','Customer Deposit')
+			chartjs_graph_onchange(response.data.monthly_payment.labels,response.data.monthly_payment.data,'monthly_payment','#monthly_payment_graph','Monthly Payment')
+			chartjs_graph_onchange(response.data.representative_apr.labels,response.data.representative_apr.data,'representative_apr','#representative_apr_graph','Representative APR')
+			chartjs_graph_onchange(response.data.on_the_road_price.labels,response.data.on_the_road_price.data,'on_the_road_price','#on_the_road_price_graph','On The Road Price')
+			chartjs_graph_onchange(response.data.purchase_final_payment.labels,response.data.purchase_final_payment.data,'purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment')
+			chartjs_graph_onchange(response.data.duration_of_agreement.labels,response.data.duration_of_agreement.data,'duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement')
+			chartjs_graph_onchange(response.data.amount_of_credit.labels,response.data.amount_of_credit.data,'amount_of_credit','#amount_of_credit_graph','Amount Of Credit')
+			*/
+      if (spliting_date_length == 1) {
+        console.dir(response.data.retailers_rung, { maxArrayLength: null });
+        single_bar_chartjs_graph_onchange(
+          response.data.retailer_contribution_labels,
+          response.data.retailer_contribution_data,
+          "retailer_deposit_contribution",
+          "#retailer_deposit_contribution_graph",
+          "Retailer Deposit Contribution",
+          "retailer_deposit_contribution_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.retailers_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.customer_deposit_labels,
+          response.data.customer_deposit_data,
+          "customer_deposit",
+          "#customer_deposit_graph",
+          "Customer Deposit",
+          "customer_deposit_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.customer_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.on_the_road_price_labels,
+          response.data.on_the_road_price_data,
+          "on_the_road_price",
+          "#on_the_road_price_graph",
+          "On The Road Price",
+          "on_the_road_price_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.on_the_road_price_rung
+        );
+
+        single_bar_chartjs_graph_onchange(
+          response.data.monthly_payment_labels,
+          response.data.monthly_payment_data,
+          "monthly_payment",
+          "#monthly_payment_graph",
+          "Monthly Payment",
+          "monthly_payment_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.monthly_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.representative_apr_labels,
+          response.data.representative_apr_data,
+          "representative_apr",
+          "#representative_apr_graph",
+          "Representative APR",
+          "representative_apr_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.representative_apr_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.purchase_final_payment_labels,
+          response.data.purchase_final_payment_data,
+          "purchase_final_payment",
+          "#purchase_final_payment_graph",
+          "Purchase Final Payment",
+          "purchase_final_payment_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.purchase_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.duration_of_agreement_labels,
+          response.data.duration_of_agreement_data,
+          "duration_of_agreement",
+          "#duration_of_agreement_graph",
+          "Duration Of Agreement",
+          "duration_of_agreement_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.duration_rung
+        );
+        single_bar_chartjs_graph_onchange(
+          response.data.amount_of_credit_labels,
+          response.data.amount_of_credit_data,
+          "amount_of_credit",
+          "#amount_of_credit_graph",
+          "Amount Of Credit",
+          "amount_of_credit_heading",
+          response,
+          response,
+          response.data.assign_colors_to_cars,
+          response.data.amount_rung
+        );
+      } else {
+        multiple_bars_chartjs_graph_onchange(
+          response.data.retailer_contribution[0]["labels"],
+          response.data.retailer_contribution,
+          "retailer_deposit_contribution",
+          "#retailer_deposit_contribution_graph",
+          "Retailer Deposit Contribution",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.customer_deposit[0]["labels"],
+          response.data.customer_deposit,
+          "customer_deposit",
+          "#customer_deposit_graph",
+          "Customer Deposit",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.monthly_payment[0]["labels"],
+          response.data.monthly_payment,
+          "monthly_payment",
+          "#monthly_payment_graph",
+          "Monthly Payment",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.representative_apr[0]["labels"],
+          response.data.representative_apr,
+          "representative_apr",
+          "#representative_apr_graph",
+          "Representative APR",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.on_the_road_price[0]["labels"],
+          response.data.on_the_road_price,
+          "on_the_road_price",
+          "#on_the_road_price_graph",
+          "On The Road Price",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.purchase_final_payment[0]["labels"],
+          response.data.purchase_final_payment,
+          "purchase_final_payment",
+          "#purchase_final_payment_graph",
+          "Purchase Final Payment",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.duration_of_agreement[0]["labels"],
+          response.data.duration_of_agreement,
+          "duration_of_agreement",
+          "#duration_of_agreement_graph",
+          "Duration Of Agreement",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+        multiple_bars_chartjs_graph_onchange(
+          response.data.amount_of_credit[0]["labels"],
+          response.data.amount_of_credit,
+          "amount_of_credit",
+          "#amount_of_credit_graph",
+          "Amount Of Credit",
+          response.data.month_names,
+          response.data.months_length,
+          response,
+          response.data.assign_colors_to_cars
+        );
+      }
+    });
+  }
+  function chartData(table) {
+    var counts = {};
+
+    table
+      .column(2, { search: "applied" })
+      .data()
+      .each(function (val) {
+        ////console.log(table.column(2).data());
+        if (counts[val]) {
+          counts[val] += 1;
+        } else {
+          counts[val] = 1;
+        }
+      });
+
+    // And map it to the format highcharts uses
+    return $.map(counts, function (val, key) {
+      return {
+        name: key,
+        y: val,
+      };
+    });
+  }
+
+  $(document).ready(function (e) {
+    $(".items").click(function () {
+      setTimeout(function () {
+        if ($(".items").length == 0) {
+          ////////////////alert('here')
+          $(".spinner1").addClass("d-none");
+        } else {
+          $(".spinner1").addClass("d-none");
+        }
+      }, 500);
+    });
+  });
+</script>
+
+<div
+  class="modal fade"
+  id="verifyModal"
+  tabindex="-1"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+  aria-labelledby="verifyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i
+          class="fa fa-exclamation-triangle"
+          style="color: #e9a100; font-size: 24px"
+          aria-hidden="true"
+        ></i>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-4">
+        <h5>
+          You can compare prices columns only. Please select columns again
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="text" id="chart_colors" value="{{chart_colors}}" hidden />
+
+<input type="text" id="title" value="{{title}}" hidden />
+
+<input type="text" id="dates" value="{{dates}}" hidden />
+
+<div class="spinner1 text-center d-none">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+<input type="text" id="project_id" value="{{project_id}}" hidden />
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+          <button
+            class="btn btn-primary export_pdf pull-right"
+            style="float: right"
+            onclick="exportpdf()"
+          >
+            Export PDF
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="pdf_title" style="display: none"></h2>
+          <h3 class="date_picker_title" style="display: none"></h3>
+          <div class="card select_basket_con">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <!-- <input type="month" id="customer_deposit_month" name="customer_deposit_month" value="2022-08" onchange="customer_deposit_setmonth(this);"/> -->
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Select Basket</h4>
+              <select
+                id="baskets"
+                name="basket_name"
+                class="form-control"
+                onchange="selectbasket(this);"
+              >
+                <!-- <option value="" selected>{{title}}</option> -->
+
+                <option value="{{current_basket.basket_id}}" selected>
+                  {{current_basket.basket_name}}
+                </option>
+                {%for basket in baskets%}
+                <option value="{{basket.basket_id}}">
+                  {{basket.basket_name}}
+                </option>
+                {%endfor%}
+              </select>
+            </div>
+          </div>
+          <div class="card date_selected">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <!-- <input type="month" id="customer_deposit_month" name="customer_deposit_month" value="2022-08" onchange="customer_deposit_setmonth(this);"/> -->
+                </div>
+              </div>
+              <input type="text" id="basket_id" value="{{id}}" hidden />
+
+              <label class="form-label">Select Date</label>
+              <input
+                type="text"
+                id="datepicker"
+                style="width: 100%"
+                value="{{current_basket.selected_date}}"
+              />
+
+              <br />
+              <br />
+
+              <div class="compare_charts">
+                <button
+                  class="btn btn-outline-primary btn-rounded"
+                  data-mdb-ripple-color="dark"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  COMPARE
+                </button>
+              </div>
+
+              <div
+                class="modal fade"
+                id="selectcolumns"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        Please Select Both Columns
+                      </h5>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-rounded"
+                        data-mdb-ripple-color="dark"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        Comparison
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <select
+                            name="comparison_column1"
+                            id="comparison_column1"
+                            style="width: 100%"
+                          >
+                            <option value="">Select Column</option>
+                            {% for column in all_columns%}
+                            <option value="{{column}}">{{column}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <!-- <div class="col-md-4"></div> -->
+                        <div class="col-md-6">
+                          <select
+                            name="comparison_column2"
+                            id="comparison_column2"
+                            style="width: 100%"
+                          >
+                            <option value="">Select Column</option>
+                            {% for column in all_columns%}
+                            <option value="{{column}}">{{column}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <br />
+                      <div class="row">
+                        <table
+                          class="table table-bordered"
+                          id="Comparison_Table"
+                        >
+                          <thead>
+                            <tr>
+                              <th>Column1</th>
+                              <th>ComparisonType</th>
+                              <th>Column2</th>
+                              <th>Delete</th>
+                            </tr>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary btn-rounded close_modal"
+                        data-mdb-ripple-color="dark"
+                        onclick="generate_comparison_chart();"
+                      >
+                        GENERATE COMPARISON CHART
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-rounded"
+                        data-mdb-ripple-color="dark"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card_drag">
+      <div class="row row_positions" id="card-analytics-drag-area">
+        
+        <div class="col-md-6 card-container-category-column" id="1">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div
+                    id="retailer_deposit_contribution_dropdown"
+                    class="dropdown"
+                  >
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('retailer_deposit_contribution','#retailer_deposit_contribution_graph','Retailer Deposit Contribution','retailer_contribution')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('retailer_deposit_contribution','#retailer_deposit_contribution_graph','Retailer Deposit Contribution','retailer_contribution')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('+','#retailer_deposit_contribution_graph','Retailer Deposit Contribution','retailer_contribution')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Retailer Deposit Contribution</h4>
+              <div id="retailer_deposit_contribution_graph">
+                <canvas
+                  id="retailer_deposit_contribution"
+                  width="400" 
+                  height="200"
+                ></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('retailer_deposit_contribution');"
+                style="cursor: pointer"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="2">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="customer_deposit_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('customer_deposit','#customer_deposit_graph','Customer Deposit','customer_deposit')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('customer_deposit','#customer_deposit_graph','Customer Deposit','customer_deposit')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('customer_deposit','#customer_deposit_graph','Customer Deposit','customer_deposit')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Customer Deposit</h4>
+              <div id="customer_deposit_graph">
+                <canvas id="customer_deposit" width="400" height="200"></canvas>
+              </div>
+              <!-- <button onclick="download('customer_deposit');">Download</button> -->
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('customer_deposit');"
+                style="cursor: pointer"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="3">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="monthly_payment_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('monthly_payment','#monthly_payment_graph','Monthly Payment','monthly_payment')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('monthly_payment','#monthly_payment_graph','Monthly Payment','monthly_payment')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('monthly_payment','#monthly_payment_graph','Monthly Payment','monthly_payment')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Monthly Payment</h4>
+              <div id="monthly_payment_graph">
+                <canvas id="monthly_payment" width="400" height="200"></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('monthly_payment');"
+                style="cursor: pointer"
+              ></i>
+
+              <!-- <button onclick="download('monthly_payment');">Download</button> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="4">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="representative_apr_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('representative_apr','#representative_apr_graph','Representative APR','representative_apr')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('representative_apr','#representative_apr_graph','Representative APR','representative_apr')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('representative_apr','#representative_apr_graph','Representative APR','representative_apr')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Representative APR</h4>
+              <div id="representative_apr_graph">
+                <canvas
+                  id="representative_apr"
+                  width="400"
+                  height="200"
+                ></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('representative_apr');"
+                style="cursor: pointer"
+              ></i>
+
+              <!-- <button onclick="download('representative_apr');">Download</button> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="5">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="on_the_road_price_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('on_the_road_price','#on_the_road_price_graph','On The Road Price','on_the_road_price')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('on_the_road_price','#on_the_road_price_graph','On The Road Price','on_the_road_price')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('on_the_road_price','#on_the_road_price_graph','On The Road Price','on_the_road_price')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">On The Road Price</h4>
+              <div id="on_the_road_price_graph">
+                <canvas
+                  id="on_the_road_price"
+                  width="400"
+                  height="200"
+                ></canvas>
+              </div>
+              <!-- <button onclick="download('on_the_road_price');">Download</button> -->
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('on_the_road_price');"
+                style="cursor: pointer"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="6">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="purchase_final_payment_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment','purchase_final_payment')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment','purchase_final_payment')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('purchase_final_payment','#purchase_final_payment_graph','Purchase Final Payment','purchase_final_payment')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Purchase Final Payment</h4>
+              <div id="purchase_final_payment_graph">
+                <canvas
+                  id="purchase_final_payment"
+                  width="400"
+                  height="200"
+                ></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('purchase_final_payment');"
+                style="cursor: pointer"
+              ></i>
+
+              <!-- <button onclick="download('purchase_final_payment');">Download</button> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="7">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="duration_of_agreement_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement','duration_of_agreement')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement','duration_of_agreement')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('duration_of_agreement','#duration_of_agreement_graph','Duration Of Agreement','duration_of_agreement')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Duration of Agreement</h4>
+              <div id="duration_of_agreement_graph">
+                <canvas
+                  id="duration_of_agreement"
+                  width="400"
+                  height="200"
+                ></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('duration_of_agreement');"
+                style="cursor: pointer"
+              ></i>
+
+              <!-- <button onclick="download('duration_of_agreement');">Download</button> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 card-container-category-column" id="8">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-end d-none d-md-inline-block">
+                <div class="btn-group mb-2">
+                  <div id="duration_of_agreement_dropdown" class="dropdown">
+                    <button
+                      class="btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        width="15"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                        />
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark">
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="linechart('amount_of_credit','#amount_of_credit_graph','Amount Of Credit','amount_of_credit')"
+                          >Line Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="barchart('amount_of_credit','#amount_of_credit_graph','Amount Of Credit','amount_of_credit')"
+                          >Bar Chart</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          onclick="doughnutchart('amount_of_credit','#amount_of_credit_graph','Amount Of Credit','amount_of_credit')"
+                          >Donut Chart</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title mb-4">Amount of Credit</h4>
+              <div id="amount_of_credit_graph">
+                <canvas id="amount_of_credit" width="400" height="200"></canvas>
+              </div>
+              <i
+                class="fa fa-download"
+                aria-hidden="true"
+                onclick="download('amount_of_credit');"
+                style="cursor: pointer"
+              ></i>
+
+              <!-- <button onclick="download('amount_of_credit');">Download</button> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6 card-container-category-column " id="9">
+						<div class="card">
+							<div class="card-body">
+								<div class="float-end d-none d-md-inline-block">
+									<div class="btn-group mb-2">
+										
+										
+									</div>
+								</div>
+								<h4 class="card-title mb-4 comparison_chart"></h4>
+								<div id="comparison_graph">
+						
+									<canvas id="comparison" width="400" height="200" ></canvas>
+								</div>
+								<!-- <button onclick="download('comparison');">Download</button>
+								<i class="fa fa-download" aria-hidden="true" onclick="download('comparison');" style="cursor: pointer;"></i>
+								
+							</div>
+							
+						</div>
+					</div> -->
+
+        <!-- <div class="col-md-6 card-container-category-column " id="10">
+						<div class="card">
+							<div class="card-body">
+								<div class="float-end d-none d-md-inline-block">
+									<div class="btn-group mb-2">
+										
+										
+									</div>
+								</div>
+								<h4 class="card-title mb-4 column_chart_heading"></h4>
+								<div id="column_graph">
+						
+									<canvas id="column" width="400" height="200" ></canvas>
+								</div>
+								<!-- <button onclick="download('column');">Download</button> 
+								<i class="fa fa-download" aria-hidden="true" onclick="download('column');" style="cursor: pointer;"></i>
+
+							</div>
+							
+						</div>
+					</div> -->
+
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row"></div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row"></div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row"></div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row"></div>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+<!-- end row -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="overlay"></div>
+        <h4 class="card-title mb-4" id="data"></h4>
+        <div class="table-responsive">
+          <table
+            id="datatable2"
+            class="table table-bordered dt-responsive normal datatable2"
+            style="border-collapse: collapse; border-spacing: 0; width: 100%"
+          >
+            <thead>
+              <tr>
+                <th>Date Extract Run</th>
+                <th>Car Make</th>
+                <th>Car Model</th>
+                <th>Type of Finance</th>
+                <th>Monthly Payment</th>
+                <th>Customer Deposit</th>
+                <th>Retailer Deposit Contribution</th>
+                <th>Representative APR</th>
+                <th>Total Amount Payable</th>
+                <th>On The Road Price</th>
+                <th>Duration of Agreement</th>
+                <th>Optional Purchase_Final Payment</th>
+                <th>Amount of Credit</th>
+                <th>Option To Purchase_Purchase Activation Fee</th>
+                <th>Fixed Interest Rate_Rate of interest PA</th>
+                <th>Excess Milage Charge</th>
+                <th>Average Miles Per Year</th>
+                <th>Retail Cash Price</th>
+                <th>Offer Expiry Date</th>
+                <th>Deposit Percent</th>
+                <th>Final Payment Percent</th>
+                <th>Webpage URL</th>
+                <th>Carimage URL</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function (e) {
+    $("body").removeClass("vertical-collpsed");
+    $("body").addClass("sidebar-enable");
+    $("body").addClass("open-nav");
+  });
+
+  function exportPDFDesign() {
+    $("#page-topbar").css("display", "none");
+    $(".vertical-menu").css("display", "none");
+    $(".main-content").css("margin-left", "0");
+    $(".page-title-box-con").css("display", "none");
+    $(".export_pdf").css("display", "none");
+    $(".select_basket_con").css("display", "none");
+
+    var pdf_title_get = $("#baskets option:selected").text();
+    $(".pdf_title").text(pdf_title_get);
+    $(".pdf_title").css("display", "block");
+
+    var selecetd_date = $("#datepicker").val();
+    $(".date_picker_title").text(selecetd_date);
+    $(".date_picker_title").css("display", "block");
+
+    $(".date_selected").css("display", "none");
+  }
+  function exportPDFDesignNormal() {
+    $("#page-topbar").css("display", "block");
+    $(".vertical-menu").css("display", "block");
+    $(".main-content").css("margin-left", "240px");
+    $(".page-title-box-con").css("display", "block");
+    $(".export_pdf").css("display", "block");
+    $(".select_basket_con").css("display", "block");
+    $("#baskets option:selected").css("display", "none");
+    $(".date_selected").css("display", "block");
+    $(".pdf_title").css("display", "none");
+    $(".date_picker_title").css("display", "none");
+  }
+
+  function exportpdf() {
+    var title = document.getElementById("title").value;
+    var element = document.querySelector(".waves-effect");
+    var style = window.getComputedStyle(element);
+    //if(style.position == 'relative' && style.overflow == 'hidden'){
+    //	document.getElementById('vertical-menu-btn').click();
+    //}
+    exportPDFDesign();
+
+    if ($("body").hasClass("sidebar-enable")) {
+      $("body").removeClass("sidebar-enable");
+      $("body").addClass("vertical-collpsed");
+      $("body").addClass("open-nav");
+    } else {
+      $("body").removeClass("open-nav");
+    }
+
+    //max-width: 1200px !important;
+    $("canvas").css("max-width", "1200px");
+
+    //$('.spinner1').removeClass('d-none');
+    setTimeout(function () {
+      html2canvas(document.body).then((canvas) => {
+        //var pdf = new jsPDF('p', 'mm', 'a4');
+        var pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+          putOnlyUsedFonts: true,
+          compress: true,
+          floatPrecision: 2,
+        });
+        //$('.spinner1').addClass('d-none');
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 211, 298);
+        pdf.save(title + ".pdf");
+
+        if ($("body").hasClass("open-nav")) {
+          $("body").removeClass("vertical-collpsed");
+          $("body").addClass("sidebar-enable");
+        }
+
+        exportPDFDesignNormal();
+      }, 50);
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    datepicker_dates = document.getElementById("dates").value;
+
+    datepicker_dates = datepicker_dates.replace("[", "");
+    datepicker_dates = datepicker_dates.replace("]", "");
+    datepicker_dates = datepicker_dates.replace(/"|'/g, "");
+    datepicker_dates = datepicker_dates.replace(/\s/g, "");
+
+    datepicker_dates = datepicker_dates.split(",");
+    //////alert(datepicker_dates)
+
+    function available(date) {
+      dmy =
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+
+      console.log(dmy);
+
+      if ($.inArray(dmy, datepicker_dates) != -1) {
+        //console.log('Available');
+        return [true, "", "Available"];
+      } else {
+        //console.log('UnAvailable');
+        return [false, "", "unAvailable"];
+      }
+    }
+    var list = new Array();
+    //$('#datepicker').multiDatesPicker();
+    $("#datepicker").multiDatesPicker({
+      beforeShowDay: available,
+      onSelect: function (dateText) {
+        //////alert(dateText);
+        list.push(dateText);
+        setmonth();
+      },
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    var basket_id = document.getElementById("basket_id").value;
+    var project_id = document.getElementById("project_id").value;
+
+    ////////////alert(basket_id);
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'get_comparison_chart' %}?basket_id=" +
+        basket_id +
+        "&project_id=" +
+        project_id +
+        "",
+    }).then(function (response) {
+      username = response.data.username;
+      bars_length = response.data.total_bars_length;
+      total_charts = response.data.total_comparison_charts;
+      //canvas_id = 'comparison'+count;
+      //graph_id = 'comparison_graph'+count;
+      //two_column_comparison(response.comparison_chart[0]['labels'],response.comparison_chart,canvas_id,graph_id,'Price',response.columns,response.month_names)
+
+      count = total_charts;
+      for (var i = 0; i < response.data.data.length; i++) {
+        $(".card-container-category-column:last").after(
+          '<div class="col-md-6 card-container-category-column " id="comparison_columns_chart' +
+            i +
+            '">\
+					<div class="card">\
+						<div class="card-body">\
+							<div class="float-end d-none d-md-inline-block">\
+								<div class="btn-group mb-2">\
+								</div>\
+							</div>\
+							<h4 class="card-title mb-4 comparison_chart' +
+            i +
+            '"></h4>\
+							<div id="comparison_graph' +
+            i +
+            '">\
+								<canvas id="comparison' +
+            i +
+            '" width="400" height="200" ></canvas>\
+							</div>\
+							<i class="fa fa-download" aria-hidden="true" onclick="download("comparison");" style="cursor: pointer;"></i>\
+						</div>\
+					</div>\
+				</div>'
+        );
+
+        canvas_id = "comparison" + i;
+        graph_id = "comparison_graph" + i;
+
+        //two_column_comparison(response.data.data[i].comparison_chart_list[0]['labels'],response.data.data[i].comparison_chart_list,canvas_id,graph_id,'Price',response.data.data[i].columns,response.data.data[i].month_names,bars_length)
+        get_two_column_comparison(
+          response.data.data[i].comparison_chart_list[0]["labels"],
+          response.data.data[i].comparison_chart_list,
+          canvas_id,
+          graph_id,
+          "Price",
+          response.data.data[i].columns,
+          response.data.data[i].month_names,
+          bars_length
+        );
+
+        var comparison_columns_array = response.data.data[i].columns;
+        $(".comparison_chart" + i).html(
+          comparison_columns_array[0] + " VS " + comparison_columns_array[1]
+        );
+
+        //$('.comparison_chart').html(comparison_columns_array[0] + ' VS ' + comparison_columns_array[1])
+        next_index = i + 1;
+        $("#exampleModal")
+          .find(".modal-body tbody")
+          .append(
+            '<tr><td style="word-break: break-all;">' +
+              comparison_columns_array[0] +
+              '</td><td>VS</td><td style="word-break: break-all;">' +
+              comparison_columns_array[1] +
+              '</td><td><a href="javascript:;" onclick=DeleteComparisonChart("' +
+              canvas_id +
+              '","' +
+              next_index +
+              '","' +
+              username +
+              '")>Delete</a></td>'
+          );
+
+        count = count + 1;
+      }
+
+      //window.location = response.data.id
+    });
+
+    var basket_id = document.getElementById("basket_id").value;
+    $(document).ajaxStart(function () {
+      //////////////////alert('Start');
+    });
+
+    var table = $("#datatable2").DataTable({
+      initComplete: function (settings, json) {
+        processing: true;
+      },
+      //"ajax": "{percantage url 'santandar-car-latest-data-basket' %}?basket_id="+basket_id+"",
+      ajax: {
+        url:
+          "{percantage url 'santandar-car-latest-data-basket' %}?basket_id=" +
+          basket_id +
+          "&project_id=" +
+          project_id +
+          "",
+
+        //success: function (data) {
+        //	data = data['data']
+        //	//console.log("Success Data: " , data)
+
+        //}
+      },
+      drawCallback: function (settings) {
+        // Here the response
+        var response = settings.json;
+        //console.log(response.retailer_contribution.labels);
+        //console.log(response.retailer_contribution.data);
+
+        //console.log('REsponse: ' + response.new_month)
+        //selectize.setValue(response.new_month);
+        latest_date = response.latest_date;
+        //////alert(latest_date);
+        dates = response.dates;
+        console.log("Dates: " + response.dates);
+        /*
+				console.log('Dates: ' + response.dates);
+				console.log('Type Dates: ' + typeof(response.dates));
+
+
+				dates = document.getElementById('dates').value;
+				dates = dates.replace('[','');
+				dates = dates.replace(']','');
+				dates = dates.replace(/"|'/g, '');
+				dates = dates.replace(/\s/g, "");
+
+
+				
+				dates = dates.split(',')
+				*/
+        //console.log(dates);
+        //console.log(typeof(dates));
+
+        //var availableDates = ["1-1-2023","2-1-2023","3-1-2023"];
+
+        //$('#datepicker').multiDatesPicker({ beforeShowDay: available });
+        $("#datepicker").datepicker("setDate", latest_date);
+        setmonth();
+
+        settitle(response.latest_month_year);
+
+        //graph(response.retailer_contribution,'#line-column-chart1','Retailer Deposit Contribution')
+        //graph(response.customer_deposit,'#line-column-chart2','Customer Deposit')
+        //graph(response.monthly_payment,'#line-column-chart3','Monthly Payment')
+        //graph(response.representative_apr,'#line-column-chart4','Representative APR')
+        //graph(response.on_the_road_price,'#line-column-chart5','On The Road Price')
+        //graph(response.purchase_final_payment,'#line-column-chart6','Purchase Final Payment')
+        //graph(response.duration_of_agreement,'#line-column-chart7','Duration Of Agreement')
+        //graph(response.amount_of_credit,'#line-column-chart8','Amount of Credit')
+
+        //retailer_contribution(response.retailer_contribution)
+        //customer_deposit(response.customer_deposit)
+
+        ////console.log(response);
+      },
+
+      processing: true,
+      language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>',
+      },
+      searchPanes: {
+        cascadePanes: true,
+        viewTotal: true,
+        layout: "columns-4",
+        columns: [0, 1, 2, 3],
+      },
+      dom: "Plfrtip",
+
+      pagingType: "numbers",
+
+      sort: true,
+      columns: [
+        { data: "users.DateExtractRun", name: "DateExtractRun" },
+        { data: "users.CarMake", name: "CarMake" },
+        { data: "users.CarModel", name: "Car Model" },
+        { data: "users.TypeofFinance", name: "TypeofFinance" },
+        { data: "users.MonthlyPayment", name: "MonthlyPayment" },
+        { data: "users.CustomerDeposit", name: "CustomerDeposit" },
+        {
+          data: "users.RetailerDepositContribution",
+          name: "RetailerDepositContribution",
+        },
+        { data: "users.RepresentativeAPR", name: "RepresentativeAPR" },
+        { data: "users.TotalAmountPayable", name: "TotalAmountPayable" },
+        { data: "users.OnTheRoadPrice", name: "OnTheRoadPrice" },
+        { data: "users.DurationofAgreement", name: "DurationofAgreement" },
+        {
+          data: "users.OptionalPurchase_FinalPayment",
+          name: "OptionalPurchase_FinalPayment",
+        },
+        { data: "users.AmountofCredit", name: "AmountofCredit" },
+        {
+          data: "users.OptionToPurchase_PurchaseActivationFee",
+          name: "OptionToPurchase_PurchaseActivationFee",
+        },
+        {
+          data: "users.FixedInterestRate_RateofinterestPA",
+          name: "FixedInterestRate_RateofinterestPA",
+        },
+        { data: "users.ExcessMilageCharge", name: "ExcessMilageCharge" },
+        { data: "users.AverageMilesPerYear", name: "AverageMilesPerYear" },
+        { data: "users.RetailCashPrice", name: "RetailCashPrice" },
+        { data: "users.OfferExpiryDate", name: "OfferExpiryDate" },
+        { data: "users.DepositPercent", name: "DepositPercent" },
+        { data: "users.FinalPaymentPercent", name: "FinalPaymentPercent" },
+        { data: "users.WebpageURL", name: "WebpageURL" },
+        { data: "users.CarimageURL", name: "CarimageURL" },
+      ],
+
+      serverSide: true,
+      select: true,
+    });
+
+    $(document).ajaxStop(function () {
+      //////////////////alert('End');
+      ////console.log('End');
+      //$.busyLoadFull("hide");
+      //$(".overlay").removeClass("loading");
+    });
+  });
+</script>
+
+<script>
+  var select1 = $("#selected_column").selectize({
+    plugins: ["remove_button"],
+    onItemRemove: function () {
+      this.open();
+    },
+    maxItems: 1,
+  });
+  //console.log('SELECTIZE COLUMN: '+ select1[0])
+  var selectize1 = select1[0].selectize;
+</script>
+<!-- end row -->{% endblock content %}
+
+<script src="/static/js/draggable.min.js"></script>
+<script src="/static/js/dragula.min.js"></script>
+
+<script>
+  function GridBasketSortIndex(csvAlertSortOrder) {
+    try {
+      //////////////////alert()
+      var arrayBasketAlerts = [];
+      arrayBasketAlerts = csvAlertSortOrder.split(",");
+
+      $.each(arrayBasketAlerts, function (index, value) {
+        $("#" + value).attr("data-sort", index);
+      });
+    } catch (exception) {
+      // //console.log(exception);
+    }
+  }
+
+  /*
+	$("#divBattleCardContent").sortable({
+            placeholder: "ui-state-highlight",
+            items: ".card-container-category-column",
+            update: function (event, ui) {
+                var csvAlertSortOrder = $(this).sortable('toArray').toString();
+                GridBasketSortIndex(csvAlertSortOrder);
+                UpdateBattlecardBasketSortIndex(csvAlertSortOrder);
+            }
+        });
+	*/
+
+  $("#card-analytics-drag-area").sortable({
+    placeholder: "ui-state-highlight",
+    items: ".card-container-category-column",
+    update: function (event, ui) {
+      //console.log('Ui: '+ ui)
+
+      var basketSortOrder = $(this).sortable("toArray").toString();
+      //////////////////alert(basketSortOrder);
+      ////console.log('Sortable: '+ basketSortOrder);
+      GridBasketSortIndex(basketSortOrder);
+      UpdateGridBasketSortIndex(basketSortOrder);
+    },
+  });
+
+  function UpdateGridBasketSortIndex(basketSortOrder) {
+    //var basketId = $("#baskets").val();
+    //var basketId  = document.getElementById("baskets");
+    //value = basketId.options[basketId.selectedIndex].value;
+    //////////////////alert(value)
+
+    var basket_sort_order = basketSortOrder;
+
+    axios({
+      method: "GET",
+      url:
+        "{percantage url 'basket_sorted_order' %}?basketsortorder=" +
+        basket_sort_order +
+        "",
+    }).then(function (response) {
+      //////////////////alert('SUCCESS')
+    });
+  }
+</script>

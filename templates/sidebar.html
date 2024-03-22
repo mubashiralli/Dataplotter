@@ -1,0 +1,149 @@
+{% load static %} {% block sidebar %}
+<!-- ========== Left Sidebar Start ========== -->
+<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+
+<!-- Create Some modals here to display at runtime when needed -->
+<div class="modal fade" id="add_dashboard_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="add_dashboard_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Dashboard</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-12">
+          <form action="" id="dashboard_form">
+            {% csrf_token %}
+            <input type="text" class="d-flex new_page_name" placeholder="Enter Dashboard Name" id="dashboard_name" name="dashboard_name" style="width:100%" required>
+            <small class="error-message" style="display:none;">Dashboard Name required</small>
+            <br>
+            <input type="checkbox" name="is_default" id="is_default_dashboard">
+            <label for="">Default Dashboard</label>
+            <br/>
+            <button type="button" class="btn btn-primary" style="float:right;" onclick="add_dashboard()">Add Dashboard</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="new_project_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="new_project_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Project</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-12">
+        <form action="" id="add_new_project_form">
+          {% csrf_token %}
+          <input type="text" class="d-flex new_page_name" placeholder="Enter New Project Name" id="new_project_name" name="new_project_name" style="width:100%" required>
+          <small class="project-name-error-message d-none" style="color: red;">Project Name required</small>
+          <br>
+        
+          <button type="button" class="btn btn-primary" style="float:right;" onclick="create_new_project_name()">Add New Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="edit_dashboard_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="edit_dashboard_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Dashboard</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-12">
+          <form action="" id="dashboard_form">
+            {% csrf_token %}
+            <input type="text" class="d-flex new_page_name" placeholder="Enter Dashboard Name" id="edit_dashboard_name" name="edit_dashboard_name" style="width:100%" required>
+            <small class="error-message" style="display:none;">Dashboard Name required</small>
+            <br>
+            <input type="checkbox" name="edit_is_default" id="edit_is_default_dashboard">
+            <label for="">Default Dashboard</label>
+            <br/>
+            <br>
+            <button type="button" class="btn btn-primary" style="float:right;" onclick="update_dashboard()">Update Dashboard</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="duplicate_page_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="duplicate_page_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Duplicate Page</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-12">
+        <form action="" id="dashboard_form">
+          {% csrf_token %}
+          <input type="text" class="d-flex duplicate_page" placeholder="Enter Duplicate Page" id="duplicate_page_name" name="duplicate_page_name" style="width:100%" required>
+          <small class="error-message" style="display:none;">Duplicate Page Name required</small>
+          <br>
+          <input type="checkbox" name="is_default" id="duplicate_is_default_dashboard">
+          <label for="">Default Dashboard</label>
+          <br/>
+          <button type="button" class="btn btn-primary" style="float:right;" onclick="add_duplicate_page()">Add Duplicate Page</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="field_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+	aria-labelledby="field_modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                
+            </div>	
+			<div class="modal-body p-12">
+                <h3>Please Enter Dashboard Name</h3>
+            </div>
+		</div>
+	</div>
+</div>
+<!-- Add Sidebar Content in Dashboard,Projects and User will display -->
+<div class="vertical-menu">
+    <div data-simplebar class="h-100">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li>
+                    <a href="{% url 'home' %}" class="waves-effect"> 
+                        <i class="ri-dashboard-line"></i>
+                        <!-- <span class="badge rounded-pill bg-success float-end">3</span> -->
+                        <span key="t-dashboard">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> <i class="ri-table-2"></i>
+                        <span key="t-projects">Projects</span>
+                    </a>
+                    <ul class="mm-show" id="projects" style="max-height: 350px;overflow-y: auto;">
+                    </ul>
+                </li>
+            <li class="admin_rights d-none">
+              <button class="add_new_project_button" onclick="add_new_project()">Add New Project</button>
+            </li> 
+            <ul style="margin-left: -35px;">
+              <li class="admin_rights d-none users_list">
+                <a href="javascript: void(0);" class="has-arrow waves-effect" id="usersDropdown"  aria-expanded="true"> <i class="ri-account-circle-line"></i>
+                  <span key="t-users"> Users</span>
+                </a>
+                <a href="{% url 'allusers' %}" key="t-user" style="margin-left: 34px;">Users List</a>
+              </li>  
+            </ul>
+            
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->
+{% endblock sidebar %}
+{% block extra_javascript %}
+{% endblock extra_javascript %}

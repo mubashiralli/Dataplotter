@@ -1,0 +1,58 @@
+.select2-dropdown-100 .select2-dropdown {
+  width: 100% !important;
+}
+
+#basket_navbar .navbar {
+background-color: '';
+}
+
+span.select2-selection.select2-selection--multiple{
+min-height:auto !important;
+background:skyblue !important;
+}
+
+select[multiple="multiple"]{
+  width: 15.6rem;
+  background: #f1f1f1;
+  height: 35px;
+}
+
+.edit_exclusive-filter-item > div,
+.edit_inclusive-filter-item > div,
+.exclusive-filter-item > div,
+.inclusive-filter-item > div{
+margin-bottom:10px;
+gap:4px;
+}
+.edit_inclusive-filter-item button,
+.edit_exclusive-filter-item button,
+.exclusive-filter-item button,
+.inclusive-filter-item button{
+  border: 0;
+  background: #e70000;
+  padding: 7px 8px;
+  border-radius: 3px;
+  color: #fff;
+}
+#edit_inclusive_column,
+#edit_exclusive_filters,
+#exclusive_column,
+#inclusive_column,#select_date{
+height: 35px;
+}
+
+.basket_filter_container{
+  max-height: 100%;
+  overflow: auto;
+}
+#show_basket_modal .modal-content{
+  height: 400px !important;
+}
+
+.filter-container > .filter_rows {
+  width: 100%;
+}
+
+.modal-dialog-scrollable .modal-content{
+ overflow: unset !important;
+}

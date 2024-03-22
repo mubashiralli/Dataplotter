@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.0.2/css/searchPanes.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+
+<!-- DataTables -->
+<!-- <link href="/core/static/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="/core/static/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="/core/static/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+
+<!-- Responsive datatable examples -->
+<!-- <link href="/core/static/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+
+<!-- Add a button to update datatable columns -->
+<button class="cbtn bg_color_gray d-none" type="button" id="update_datatable_column_button" name="update_datatable_column_button" onclick="update_columns()">Modify Column</button>
+
+<!-- Add a div to show datatable here -->
+<div class="card card-container-category-column" id="datatables" style="display: none;">
+    <div class="card-body">  
+        <table id="myTable" class="table table-bordered nowrap normal" style="width: 100%;">
+            <thead>
+                <tr id="headerRow"></tr>
+                </tr>
+            </thead>
+            <tbody>
+                <div class="charts_spinner datatable_spiner text-center d-none"></div>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- datatables -->
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>

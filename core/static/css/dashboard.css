@@ -1,0 +1,251 @@
+.metismenu li{
+  position:relative;
+}
+body[data-sidebar="dark"] #sidebar-menu ul li a{
+  margin-right: 30px;
+}
+.delete_icons {
+  position: absolute;
+  right: 12px;
+  top: 2px;
+}
+.edit_page {
+  position: absolute;
+  right: 30px;
+  top: 2px;
+}
+.custom-li {
+    border-left: 5px;
+    cursor: pointer;
+}
+#add_table {
+    border-radius: 50px;
+    border: none;
+    /* padding: 10px; */
+    font-size: 14px;
+    background-color: #157eab;
+    color: #fff;
+    width:40px;
+    height:40px;
+}
+#add_table_header{
+  border-radius: 50px;
+  border: none;
+  font-size: 14px;
+  width: 40px;
+  height: 40px;
+  background-color: #347b99;
+  color: white;
+}
+#add_donut_chart {
+    border-radius: 75px;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #157eab;
+    color: #fff;
+}
+#displayOptionsBtn {
+    background-color: #00589e;
+    color: #fff;
+}
+.display-options-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc;
+    color: blue;
+    border: none;
+    border-radius: 50px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .display-options-btn i {
+    margin-right: 5px;
+  }
+.display-options {
+    display: inline-block;
+}
+.display-options .display-options-dropdown {
+  position: absolute;
+  display: none;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.display-options-dropdown ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin-bottom:0;
+}
+
+.display-options-dropdown li {
+    /*flex-basis: calc(33.33% - 10px);*/
+    /*margin-bottom: 10px;*/
+    display:flex;
+}
+
+.display-options-dropdown ul li a {
+  padding: 15px !important;
+  display: inline-block;
+}
+#displayOptionsDropdown ul li a:hover {
+  color: #00589e;
+  background: skyblue;
+}
+
+
+.display-options-dropdown li a {
+  text-decoration: none;
+  color: #000;
+}
+
+.display-options-btn {
+  position: relative;
+  display: inline-block;
+  border: none;
+  background-color: #f9f9f9;
+  color: #000;
+  padding: 8px 13px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  font-size:14px;
+  top:2px;
+}
+
+.display-options-btn:focus + .display-options-dropdown,
+.display-options-dropdown:hover {
+  display: block;
+}
+
+.cbtn {
+  border: 0;
+  padding: 5px 12px;
+  border-radius: 4px;
+  transition:all 0.5s;
+  font-size:14px;
+}
+.cbtn:hover {
+  opacity:0.8;
+}
+
+.bg_color_blue{
+  background:#00589e ;
+  color: #fff;
+}
+.bg_color_skyblue{
+  background: #157eab;
+  color: #fff;
+}
+.bg_color_gray{
+  background: #9397a9;
+  color: #fff;
+}
+.bg_color_red{
+  background: #ef5350;
+  color: #fff;
+  float:right;
+  margin-bottom:10px;
+  margin-top:-19px;
+}
+.contactButton {
+  background: #157eab;
+  color: white;
+  font-family: inherit;
+  padding: 0.45em;
+  padding-left: 1.0em;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #714da6;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3em;
+}
+.iconButton {
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7a8cf3;
+  right: 0.3em;
+  transition: all 0.3s;
+}
+.contactButton:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em #5566c2;
+}
+.contactButton:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em #5566c2;
+}
+input, select {
+  border: 2px solid #787878;
+  border-radius: 3px;
+  padding: 3px;
+}
+input:focus-visible, select:focus-visible {
+  border-color: #00589e;
+  outline:0;
+
+}
+
+body[data-sidebar="dark"] #sidebar-menu ul li a{
+  position: relative;
+  overflow-wrap: break-word;
+}
+#sidebar-menu .has-arrow:after{
+  position: absolute !important;
+  right: 0;
+  top: 8px;
+}
+
+.add_new_project_button{
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+.add_new_project_button {
+  width: 9em;
+  height: 2em;
+  border-radius: 30em;
+  font-size: 15px;
+  font-family: inherit;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 6px 6px 12px #c5c5c5,
+              -6px -6px 12px #ffffff;
+  }
+  .add_new_project_button::before {
+  content: '';
+  width: 0;
+  height: 3em;
+  border-radius: 30em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(to right, #157eab 0%, #ffff 100%);
+  transition: .5s ease;
+  display: block;
+  z-index: -1;
+  }
+  
+  .add_new_project_button:hover::before {
+  width: 9em;
+  }
